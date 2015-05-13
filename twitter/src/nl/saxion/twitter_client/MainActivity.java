@@ -46,7 +46,7 @@ public class MainActivity extends ActionBarActivity {
 		model = app.getModel();
 		
 		listview = (ListView) findViewById(R.id.listViewTweet);
-		System.out.println("");
+		System.out.println(" ");
 		
 		
 		handler = new JSONHandler(this);
