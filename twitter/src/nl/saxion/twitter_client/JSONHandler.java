@@ -58,7 +58,13 @@ public class JSONHandler {
 				JSONArray hashtags = entity.getJSONArray("hashtags");
 				JSONArray urls = entity.getJSONArray("urls");
 				JSONArray userMentions = entity.getJSONArray("user_mentions");
-				//JSONArray media = entity.getJSONArray("media");
+//				JSONArray media = entity.getJSONArray("media");
+				
+//				for(int a = 0 ; a < media.length(); a++) {
+//					JSONObject med = media.getJSONObject(a);
+//					Log.d("MEDIA",med.getString("media_url"));
+//				}
+				
 
 				
 				
@@ -66,7 +72,7 @@ public class JSONHandler {
 				ArrayList<Url>urlList = new ArrayList<Url>();
 				ArrayList<UserMention> mentionList = new ArrayList<UserMention>();
 				
-				
+				// makes a hashtag object
 				for(int j = 0 ; j < hashtags.length() ; j ++ ) {
 					JSONObject hashtag = hashtags.getJSONObject(j);	
 					JSONArray indices = hashtag.getJSONArray("indices");
@@ -77,7 +83,7 @@ public class JSONHandler {
 					}
 					
 				}
-				
+				// makes an url object
 				for(int k = 0; k < urls.length(); k++){
 					JSONObject url = urls.getJSONObject(k);
 					JSONArray indices = url.getJSONArray("indices");
@@ -87,6 +93,7 @@ public class JSONHandler {
 						urlList.add(u);
 					}
 				}
+				// makes an user mention object
 				for(int l = 0; l < userMentions.length() ; l++) {
 					JSONObject userMention = userMentions.getJSONObject(l);
 					JSONArray indices = userMention.getJSONArray("indices");

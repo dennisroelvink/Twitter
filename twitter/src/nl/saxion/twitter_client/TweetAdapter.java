@@ -70,15 +70,18 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		ImageView profilePhoto = (ImageView) convertView.findViewById(R.id.imageViewProfilePhoto);
 		ImageView photo = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
 		
+		// makes the hashtag text blue
 		SpannableString spannableTweet = new SpannableString(tweet.getText());
 		for(int i = 0; i < tweet.getHashtagListSize(); i++){
 			Hashtag tag = tweet.getHashtagAtPosition(i);
 			spannableTweet.setSpan(new ForegroundColorSpan(Color.rgb(87, 186, 48)), tag.getBeginHash(), tag.getEndHash(), 0);
 		}
+		// makes url clickable
 		for(int i = 0; i < tweet.getUrlListSize(); i++){
 			Url u = tweet.getUrlAtPosition(i);
 			spannableTweet.setSpan(new URLSpan(u.getUrl()), u.getBeginUrl(), u.getEndUrl(), 0);
 		}
+		// makes the user mention text orange
 		for(int i = 0; i < tweet.getMentionListSize(); i++){
 			UserMention UM = tweet.getMentionAtPosition(i);
 			spannableTweet.setSpan(new ForegroundColorSpan(Color.rgb(247, 149, 49)), UM.getBeginMention(), UM.getEndMention(), 0);

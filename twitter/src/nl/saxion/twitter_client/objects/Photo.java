@@ -7,6 +7,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 
+/**
+ * The photo class
+ * @author Sharon en Dennis
+ *
+ */
 public class Photo {
 
 	private String photoURL;

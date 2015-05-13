@@ -1,5 +1,10 @@
 package nl.saxion.twitter_client.objects;
 
+/**
+ * The user mention class
+ * @author Sharon en Dennis
+ *
+ */
 public class UserMention {
 	private String screenName;
 	private int beginMention;
@@ -11,8 +16,6 @@ public class UserMention {
 		this.endMention = endMention;
 	}
 	
-	
-
 	/**
 	 * @return the screenName
 	 */
