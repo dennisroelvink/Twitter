@@ -68,7 +68,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		TextView userName = (TextView)convertView.findViewById(R.id.textViewUserName);
 		TextView name = (TextView) convertView.findViewById(R.id.textViewName);
 		ImageView profilePhoto = (ImageView) convertView.findViewById(R.id.imageViewProfilePhoto);
-		ImageView photo = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
+		//ImageView photo = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
 		
 		// makes the hashtag text blue
 		SpannableString spannableTweet = new SpannableString(tweet.getText());
@@ -84,7 +84,8 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		// makes the user mention text orange
 		for(int i = 0; i < tweet.getMentionListSize(); i++){
 			UserMention UM = tweet.getMentionAtPosition(i);
-			spannableTweet.setSpan(new ForegroundColorSpan(Color.rgb(247, 149, 49)), UM.getBeginMention(), UM.getEndMention(), 0);
+			spannableTweet.setSpan(new URLSpan("http://www.twitter.com/"+UM.getScreenName()), UM.getBeginMention(), UM.getEndMention(), 0);
+			spannableTweet.setSpan(new ForegroundColorSpan(Color.rgb(247, 149, 49)), UM.getBeginMention(),UM.getEndMention() , 0);
 		}
 		
 		tweetmsg.setLinksClickable(true);
@@ -95,6 +96,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		userName.setText(tweet.getUser().getUserName());
 		name.setText(" (" +tweet.getUser().getName() + ")");
 		profilePhoto.setImageBitmap(tweet.getUser().getBitmap());
+		//photo.setImageBitmap(tweet.getPhoto().getBitmap());
 		return convertView;
 		
 	}
