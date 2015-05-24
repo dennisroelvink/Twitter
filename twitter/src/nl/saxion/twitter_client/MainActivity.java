@@ -60,6 +60,9 @@ public class MainActivity extends ActionBarActivity {
 			public boolean onQueryTextSubmit(String query) {
 				if(query.equals("DELETE")) {
 					model.deleteAllTweets();
+				}else if(query.equals("test")) {
+					Tweet tempTweet = model.getTweetList().get(0);
+					tempTweet.setText("Test Tweet 111111111111111111111111111111111111111111111111111");
 				} else {
 					model.deleteAllTweets();
 					Toast.makeText(getApplicationContext(), "TWEETS LEFT :  "+ ""+model.getTweetList().size(), Toast.LENGTH_SHORT).show();
