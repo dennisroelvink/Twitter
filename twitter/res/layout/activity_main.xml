@@ -10,11 +10,26 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="nl.saxion.twitter_client.MainActivity" >
 
-    <ListView
-        android:id="@+id/listViewTweet"
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text="Tweetie Twitter App"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <SearchView
+        android:id="@+id/searchViewTweetSearch"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.89" >
+        android:iconifiedByDefault="false" >
+
+    </SearchView>
+
+    <ListView
+        android:id="@+id/listViewTweet"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
     </ListView>
 
 </LinearLayout>

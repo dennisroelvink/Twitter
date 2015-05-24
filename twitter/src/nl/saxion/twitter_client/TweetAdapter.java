@@ -53,7 +53,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		TweetApplication app = (TweetApplication) getContext().getApplicationContext();
 		model = app.getModel();
 		inflater = LayoutInflater.from(context);
-		
+		model.addObserver(this);
 	}
 	
 	/**
@@ -68,7 +68,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		TextView userName = (TextView)convertView.findViewById(R.id.textViewUserName);
 		TextView name = (TextView) convertView.findViewById(R.id.textViewName);
 		ImageView profilePhoto = (ImageView) convertView.findViewById(R.id.imageViewProfilePhoto);
-		//ImageView photo = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
+		ImageView photo = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
 		
 		// makes the hashtag text blue
 		SpannableString spannableTweet = new SpannableString(tweet.getText());
@@ -96,7 +96,8 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		userName.setText(tweet.getUser().getUserName());
 		name.setText(" (" +tweet.getUser().getName() + ")");
 		profilePhoto.setImageBitmap(tweet.getUser().getBitmap());
-		//photo.setImageBitmap(tweet.getPhoto().getBitmap());
+		photo.setImageBitmap(tweet.getPhoto().getBitmap());
+
 		return convertView;
 		
 	}

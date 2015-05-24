@@ -24,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Toast;
 
 /**
  * The MainActivity class
@@ -36,27 +38,48 @@ public class MainActivity extends ActionBarActivity {
 	private ListView listview;
 	private TweetAdapter adapter;
 	private JSONHandler handler;
+	private SearchView searcher;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		// hallo2
+		
 		TweetApplication app = (TweetApplication) getApplicationContext();
 		model = app.getModel();
 		
+		
+		
+		searcher = (SearchView) findViewById(R.id.searchViewTweetSearch);
 		listview = (ListView) findViewById(R.id.listViewTweet);
-		
-		
-		
 		handler = new JSONHandler(this);
-		handler.JSONToTweet("searchresult.json");
 		
+		searcher.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 		
+			@Override
+			public boolean onQueryTextSubmit(String query) {
+				if(query.equals("DELETE")) {
+					model.deleteAllTweets();
+				} else {
+					model.deleteAllTweets();
+					Toast.makeText(getApplicationContext(), "TWEETS LEFT :  "+ ""+model.getTweetList().size(), Toast.LENGTH_SHORT).show();
+					handler.JSONToTweet("searchresult.json");
+				}
 
+				return false;
+			}
+			
+			@Override
+			public boolean onQueryTextChange(String newText) {
+				
+				return false;
+			}
+		});
+		
 		
 		adapter = new TweetAdapter(this,R.layout.tweet, model.getTweetList());
 		listview.setAdapter(adapter);
+		model.addObserver(adapter);
 	}
 
 	@Override

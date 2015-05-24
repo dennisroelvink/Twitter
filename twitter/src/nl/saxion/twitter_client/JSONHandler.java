@@ -58,19 +58,24 @@ public class JSONHandler {
 				JSONArray hashtags = entity.getJSONArray("hashtags");
 				JSONArray urls = entity.getJSONArray("urls");
 				JSONArray userMentions = entity.getJSONArray("user_mentions");
-//				JSONArray media = entity.getJSONArray("media");
-				
-//				for(int a = 0 ; a < media.length(); a++) {
-//					JSONObject med = media.getJSONObject(a);
-//					Log.d("MEDIA",med.getString("media_url"));
-//				}
-				
-
-				
+				Photo p = new Photo("");
+				try {
+					JSONArray media = entity.getJSONArray("media");
+					for(int a = 0 ; a < media.length(); a++) {
+						JSONObject med = media.getJSONObject(a);
+						p.setPhotoURL(med.getString("media_url"));
+						Log.d("MEDIA",med.getString("media_url"));
+					}
+				}catch(JSONException e){
+					e.printStackTrace();
+					Log.d("JSON","Media Error");
+				}			
+			
 				
 				ArrayList<Hashtag> list = new ArrayList<Hashtag>();
 				ArrayList<Url>urlList = new ArrayList<Url>();
 				ArrayList<UserMention> mentionList = new ArrayList<UserMention>();
+				
 				
 				// makes a hashtag object
 				for(int j = 0 ; j < hashtags.length() ; j ++ ) {
@@ -105,7 +110,8 @@ public class JSONHandler {
 				
 				Log.d("Check", "Test2");
 				String tweetText = tweet.getString("text");
-				Tweet tweetmsg = new Tweet(tweetText,new User(user.getString("screen_name"), user.getString("name"), user.getString("profile_image_url")), list, urlList, mentionList);
+				User un = new User(user.getString("screen_name"), user.getString("name"), user.getString("profile_image_url"));
+				Tweet tweetmsg = new Tweet(tweetText,un, list, urlList, mentionList,p);
 				model.addTweet(tweetmsg);
 				
 			}

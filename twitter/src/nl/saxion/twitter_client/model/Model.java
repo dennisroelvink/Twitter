@@ -2,7 +2,10 @@ package nl.saxion.twitter_client.model;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 
+import android.widget.Toast;
+import nl.saxion.twitter_client.MainActivity;
 import nl.saxion.twitter_client.objects.Tweet;
 import nl.saxion.twitter_client.objects.User;
 /**
@@ -10,7 +13,7 @@ import nl.saxion.twitter_client.objects.User;
  * @author Sharon and Dennis
  *
  */
-public class Model extends Observable {
+public class Model extends Observable implements Observer {
 
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
 	
@@ -20,6 +23,14 @@ public class Model extends Observable {
 	 */
 	public void addTweet(Tweet tweet){
 		tweetList.add(tweet);
+		tweet.addObserver(this);
+		setChanged();
+		notifyObservers();
+	}
+	public void deleteAllTweets() {
+		tweetList.clear();
+		setChanged();
+		notifyObservers();
 	}
 	
 	/**
@@ -28,5 +39,12 @@ public class Model extends Observable {
 	 */
 	public ArrayList<Tweet> getTweetList(){
 		return tweetList;
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		setChanged();
+		notifyObservers();
+		
 	}
 }

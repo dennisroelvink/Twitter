@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Observable;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -14,7 +15,7 @@ import android.os.AsyncTask;
  * @author Sharon and Dennis
  *
  */
-public class Tweet {
+public class Tweet extends Observable {
 	
 	private ArrayList<Hashtag> hashtagList;
 	private ArrayList<Url> urlList;
@@ -24,12 +25,13 @@ public class Tweet {
 	private long tweetID;
 	private User user;
 	
-	public Tweet(String text, User user, ArrayList<Hashtag> list, ArrayList<Url> urlList, ArrayList<UserMention> mentionList) {
+	public Tweet(String text, User user, ArrayList<Hashtag> list, ArrayList<Url> urlList, ArrayList<UserMention> mentionList,Photo p) {
 		this.text = text;
 		this.user = user;
 		hashtagList = list;
 		this.urlList = urlList; 
 		this.mentionList = mentionList;
+		this.photo = p;
 		
 	}
 	public int getMentionListSize() {
@@ -63,6 +65,8 @@ public class Tweet {
 	 */
 	public void setText(String text) {
 		this.text = text;
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -77,6 +81,8 @@ public class Tweet {
 	 */
 	public void setTweetID(long tweetID) {
 		this.tweetID = tweetID;
+		setChanged();
+		notifyObservers();
 	}
 
 	/**
@@ -91,6 +97,8 @@ public class Tweet {
 	 */
 	public void setUser(User user) {
 		this.user = user;
+		setChanged();
+		notifyObservers();
 	}
 	/**
 	 * @return the photo
@@ -103,6 +111,8 @@ public class Tweet {
 	 */
 	public void setPhoto(Photo photo) {
 		this.photo = photo;
+		setChanged();
+		notifyObservers();
 	}
 
 
