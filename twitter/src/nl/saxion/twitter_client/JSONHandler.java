@@ -156,5 +156,17 @@ public class JSONHandler {
 		}
 		return sb.toString();		
 	}
+    
+    public void getToken(String text) {
+		try {
+			JSONObject token = new JSONObject(text);
+			String test = token.getString("acces_token");
+			Log.d("Pikachu",test);
+		} catch(JSONException e){
+			e.printStackTrace();
+			Log.d("JSON","Media Error");
+		}	
+
+    }
 
 }

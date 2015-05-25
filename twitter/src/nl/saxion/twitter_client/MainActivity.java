@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,6 +42,8 @@ public class MainActivity extends ActionBarActivity {
 	private TweetAdapter adapter;
 	private JSONHandler handler;
 	private SearchView searcher;
+	private URLTool urlTool;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +52,9 @@ public class MainActivity extends ActionBarActivity {
 		
 		TweetApplication app = (TweetApplication) getApplicationContext();
 		model = app.getModel();
+		urlTool = new URLTool(this);
+		
+		
 		
 		
 		
@@ -58,17 +66,11 @@ public class MainActivity extends ActionBarActivity {
 		
 			@Override
 			public boolean onQueryTextSubmit(String query) {
-				if(query.equals("DELETE")) {
-					model.deleteAllTweets();
-				}else if(query.equals("test")) {
-					Tweet tempTweet = model.getTweetList().get(0);
-					tempTweet.setText("Test Tweet 111111111111111111111111111111111111111111111111111");
-				} else {
-					model.deleteAllTweets();
-					Toast.makeText(getApplicationContext(), "TWEETS LEFT :  "+ ""+model.getTweetList().size(), Toast.LENGTH_SHORT).show();
-					handler.JSONToTweet("searchresult.json");
-				}
-
+				Log.d("Conchita",""+urlTool.getJSONText());
+				String HTTPSrequest = "https://api.twitter.com/1.1/search/tweets.json?q=" +query;
+				model.deleteAllTweets();
+				Toast.makeText(getApplicationContext(), "TWEETS LEFT :  "+ ""+model.getTweetList().size(), Toast.LENGTH_SHORT).show();
+				handler.JSONToTweet("searchresult.json");
 				return false;
 			}
 			
@@ -78,6 +80,7 @@ public class MainActivity extends ActionBarActivity {
 				return false;
 			}
 		});
+		
 		
 		
 		adapter = new TweetAdapter(this,R.layout.tweet, model.getTweetList());
