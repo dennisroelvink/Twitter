@@ -31,7 +31,6 @@ public class User {
 		this.name = name;
 		this.userName = userName;
 		this.setProfilePhotoUrl(photo);
-		this.userID = userID;
 		new URLHandler().execute();
 	}
 	

@@ -4,24 +4,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.StatusLine;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Base64;
@@ -35,11 +25,16 @@ public class URLTool {
 	private String authString = API_KEY + ":" + API_SECRET;
 	private String base64 = Base64.encodeToString(authString.getBytes(), Base64.NO_WRAP);
 	
-	private InputStream is;
 	private String JSONText;
+	private JSONHandler handler;
+	private String url;
 	
 	public URLTool(Activity activity) {
 		Log.d("Conchita","Execute URLHandler ofzo");
+		handler = new JSONHandler(activity);
+	}
+	
+	public void ExecuteHandler() {
 		new URLHandler().execute();
 	}
 
@@ -60,8 +55,32 @@ public class URLTool {
 	}
 
 
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+
+
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+
+	/**
+	 * Gets Twitter messages given a certain word and puts them into the listview on the mainscreen.
+	 * @author Sharon and Dennis
+	 *
+	 */
 	private final class URLHandler extends AsyncTask<Void,Void,Void> {
 
+		/**
+		 *  Gets Twitter messages given a certain word, this method runs in the background of the application
+		 */
 		@Override
 		protected Void doInBackground(Void... params) {
 			
@@ -84,34 +103,37 @@ public class URLTool {
 			       while((line = reader.readLine()) != null){
 			    	   requestBuilder.append(line);
 			       }
-			       //JSONHandler handler = new JSONHandler(null);
-			       //handler.getToken(requestBuilder.toString());
+			       
 			       Log.d("Michael Jackson",requestBuilder.toString());
+			       token = handler.getToken(requestBuilder.toString());
 			       
-			       
+
 			       
 			} catch (UnsupportedEncodingException e1) {
 				e1.printStackTrace();
 			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
-			String url = "https://api.twitter.com/1.1/search/tweets.json?q=%23aanhetprogrammerenmetdennis";
-			     StringBuilder builder = new StringBuilder();
+			   
+			StringBuilder builder = new StringBuilder();
 			     HttpClient client = new DefaultHttpClient();
+			     Log.d("URL",url);
 			     HttpGet httpGet = new HttpGet(url);
 			     try{
-			      HttpResponse response = client.execute(httpGet);
-			      StatusLine statusLine = response.getStatusLine();
-			      int statusCode = statusLine.getStatusCode();
-			       HttpEntity entity = response.getEntity();
-			       InputStream content = entity.getContent();
-			       BufferedReader reader = new BufferedReader(new InputStreamReader(content));
-			       String line;
+						httpGet.setHeader("Authorization", "Bearer " + token);
+						HttpResponse response = client.execute(httpGet);
+						HttpEntity entity = response.getEntity();
+						InputStream content = entity.getContent();
+						BufferedReader reader = new BufferedReader(new InputStreamReader(content));
+						String line;
+						
+
+					
 			       while((line = reader.readLine()) != null){
 			    	   builder.append(line);
 			       }
@@ -124,28 +146,20 @@ public class URLTool {
 			     } catch (IOException e){
 			      e.printStackTrace();
 			     }
-			
-			
-//			String url = "https://api.twitter.com/1.1/search/tweets.json?q=%23aanhetprogrammerenmetdennis";
-//			HttpClient client = new DefaultHttpClient();
-//			HttpGet httpGet = new HttpGet(url);
-//			
-//			httpGet.setHeader("Authorization", "Bearer " + token);
-//			ResponseHandler<String> handler = new BasicResponseHandler();
-//			try {
-//				String result = client.execute(httpGet, handler);
-//				Log.d("Rihanna",result);
-//			} catch (ClientProtocolException e) {
-//				Log.d("Rihanna","dut nie1");
-//				e.printStackTrace();
-//			} catch (IOException e) {
-//				Log.d("Rihanna","dut nie2");
-//				e.printStackTrace();
-//			}
+
 			
 			return null;
 			
 			
+		}
+
+		/**
+		 * Waits until the doInBackground method is finished
+		 */
+		@Override
+		protected void onPostExecute(Void result) {
+			handler.JSONToTweet(getJSONText());
+			super.onPostExecute(result);
 		}
 		
 	}

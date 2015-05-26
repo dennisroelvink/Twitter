@@ -1,6 +1,5 @@
 package nl.saxion.twitter_client.objects;
 
-import java.util.ArrayList;
 
 public class Hashtag {
 

@@ -1,14 +1,8 @@
 package nl.saxion.twitter_client.objects;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Observable;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 
 /**
  * The Tweet class

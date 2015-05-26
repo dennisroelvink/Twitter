@@ -3,11 +3,8 @@ package nl.saxion.twitter_client.model;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
-
-import android.widget.Toast;
-import nl.saxion.twitter_client.MainActivity;
 import nl.saxion.twitter_client.objects.Tweet;
-import nl.saxion.twitter_client.objects.User;
+
 /**
  * The Model Class
  * @author Sharon and Dennis

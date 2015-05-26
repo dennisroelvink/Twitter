@@ -1,31 +1,20 @@
 package nl.saxion.twitter_client;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
 import nl.saxion.twitter_client.objects.Hashtag;
+import nl.saxion.twitter_client.objects.Photo;
 import nl.saxion.twitter_client.objects.Tweet;
 import nl.saxion.twitter_client.objects.Url;
 import nl.saxion.twitter_client.objects.UserMention;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.LayoutInflater;
@@ -45,7 +34,6 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 
 	private LayoutInflater inflater;
 	private Model model;
-	private Bitmap bitmap;
 	
 	public TweetAdapter(Context context, int resource, List<Tweet> objects) {
 		super(context, resource, objects);
@@ -88,10 +76,13 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 			spannableTweet.setSpan(new ForegroundColorSpan(Color.rgb(247, 149, 49)), UM.getBeginMention(),UM.getEndMention() , 0);
 		}
 		
+		// Photo url link ding
+		Photo pic = tweet.getPhoto();
+		spannableTweet.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), pic.getBeginPhotoURL(), pic.getEndPhotoURL(), 0);
+
 		tweetmsg.setLinksClickable(true);
 		tweetmsg.setMovementMethod(LinkMovementMethod.getInstance());
-		
-		
+
 		tweetmsg.setText(spannableTweet, BufferType.SPANNABLE);
 		userName.setText(tweet.getUser().getUserName());
 		name.setText(" (" +tweet.getUser().getName() + ")");

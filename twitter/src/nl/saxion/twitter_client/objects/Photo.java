@@ -19,10 +19,10 @@ public class Photo {
 	private int endPhotoURL;
 	private Bitmap bitmap;
 	
-	public Photo(String photoURL){
+	public Photo(String photoURL, int begin, int end){
 		this.setPhotoURL(photoURL);
-		//this.setBeginPhotoURL(beginPhotoURL);
-		//this.setEndPhotoURL(endPhotoURL);
+		this.setBeginPhotoURL(begin);
+		this.setEndPhotoURL(end);
 		new URLHandler().execute();
 	}
 
