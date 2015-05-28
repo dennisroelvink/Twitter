@@ -45,18 +45,22 @@ public class MainActivity extends ActionBarActivity {
 
 			@Override
 			public boolean onQueryTextSubmit(String query) {
+				if(!urlTool.isSearching()) return true;
+				
 				model.deleteAllTweets();
 				Log.d("Conchita", "" + urlTool.getJSONText());
 				try {
 					String input = URLEncoder.encode(query, "UTF-8");
-					String HTTPSrequest = "https://api.twitter.com/1.1/search/tweets.json?q="+ input;
+					String HTTPSrequest = "https://api.twitter.com/1.1/search/tweets.json?q="+ input+"&count=100";
 					urlTool.setUrl(HTTPSrequest);
 					urlTool.ExecuteHandler();
+					
+					searcher.clearFocus();
 				} catch (UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 
-				return false;
+				return true;
 			}
 
 			@Override

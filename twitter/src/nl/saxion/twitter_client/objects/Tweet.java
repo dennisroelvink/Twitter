@@ -2,6 +2,7 @@ package nl.saxion.twitter_client.objects;
 
 import java.util.ArrayList;
 import java.util.Observable;
+import java.util.Observer;
 
 
 /**
@@ -9,7 +10,7 @@ import java.util.Observable;
  * @author Sharon and Dennis
  *
  */
-public class Tweet extends Observable {
+public class Tweet extends Observable implements Observer {
 	
 	private ArrayList<Hashtag> hashtagList;
 	private ArrayList<Url> urlList;
@@ -107,6 +108,12 @@ public class Tweet extends Observable {
 		this.photo = photo;
 		setChanged();
 		notifyObservers();
+	}
+	@Override
+	public void update(Observable observable, Object data) {
+		setChanged();
+		notifyObservers();
+		
 	}
 
 

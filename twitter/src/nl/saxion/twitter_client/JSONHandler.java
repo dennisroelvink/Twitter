@@ -130,6 +130,7 @@ public class JSONHandler {
 				String tweetText = tweet.getString("text");
 				User un = new User(user.getString("screen_name"), user.getString("name"), user.getString("profile_image_url"));
 				Tweet tweetmsg = new Tweet(tweetText,un, list, urlList, mentionList,p);
+				un.addObserver(tweetmsg);
 				model.addTweet(tweetmsg);
 				
 			}
