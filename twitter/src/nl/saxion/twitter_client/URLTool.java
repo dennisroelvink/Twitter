@@ -33,7 +33,6 @@ public class URLTool {
 	private boolean searching = true;
 
 	public URLTool(Activity activity) {
-		Log.d("Conchita", "Execute URLHandler ofzo");
 		handler = new JSONHandler(activity);
 	}
 
@@ -126,13 +125,13 @@ public class URLTool {
 					requestBuilder.append(line);
 				}
 
-				Log.d("Michael Jackson", requestBuilder.toString());
 				token = handler.getToken(requestBuilder.toString());
 
 			} catch (UnsupportedEncodingException e1) {
+				Log.d("UnsupportedEncodingException","Encoding fout response");
 				e1.printStackTrace();
 			} catch (ClientProtocolException e) {
-
+				Log.d("ClientProtocolException","Client protocol fout");
 				e.printStackTrace();
 			} catch (IOException e) {
 
@@ -157,11 +156,11 @@ public class URLTool {
 				}
 
 				setJSONText(builder.toString());
-				Log.d("Carrie", builder.toString());
-
 			} catch (ClientProtocolException e) {
+				Log.d("Client","Client fout");
 				e.printStackTrace();
 			} catch (IOException e) {
+				Log.d("IO","IO Fout");
 				e.printStackTrace();
 			}
 			return null;

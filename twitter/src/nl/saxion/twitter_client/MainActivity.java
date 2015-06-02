@@ -2,6 +2,7 @@ package nl.saxion.twitter_client;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 /**
  * The MainActivity class
@@ -48,17 +50,21 @@ public class MainActivity extends ActionBarActivity {
 				if(!urlTool.isSearching()) return true;
 				
 				model.deleteAllTweets();
-				Log.d("Conchita", "" + urlTool.getJSONText());
-				try {
-					String input = URLEncoder.encode(query, "UTF-8");
-					String HTTPSrequest = "https://api.twitter.com/1.1/search/tweets.json?q="+ input+"&count=100";
-					urlTool.setUrl(HTTPSrequest);
-					urlTool.ExecuteHandler();
-					
-					searcher.clearFocus();
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+				Log.d("JSONTEXT", "" + urlTool.getJSONText());
+				if(query.length() != 0) {
+					try {
+						String input = URLEncoder.encode(query, "UTF-8");
+						String HTTPSrequest = "https://api.twitter.com/1.1/search/tweets.json?q="+ input+"&count=100";
+						urlTool.setUrl(HTTPSrequest);
+						urlTool.ExecuteHandler();
+						
+						searcher.clearFocus();
+					} catch (UnsupportedEncodingException e) {
+						Log.d("Error httprequest","request is niet geldig");
+						e.printStackTrace();
+					}
 				}
+
 
 				return true;
 			}

@@ -40,7 +40,6 @@ public class JSONHandler {
 		try {
 		
 			JSONObject obj = new JSONObject(test);
-			Log.d("Test","Test");
 			
 			JSONArray tweets = obj.getJSONArray("statuses");
 			Log.d("Check", "Test1");
@@ -85,13 +84,18 @@ public class JSONHandler {
 				
 				// makes a hashtag object
 				for(int j = 0 ; j < hashtags.length() ; j ++ ) {
-					JSONObject hashtag = hashtags.getJSONObject(j);	
-					JSONArray indices = hashtag.getJSONArray("indices");
-					
-					if(indices.length() != 0) {
-						Hashtag tag = new Hashtag(hashtag.getString("text"), indices.getInt(0), indices.getInt(1));
-						list.add(tag);
+					try{
+						JSONObject hashtag = hashtags.getJSONObject(j);	
+						JSONArray indices = hashtag.getJSONArray("indices");
+						
+						if(indices.length() != 0) {
+							Hashtag tag = new Hashtag(hashtag.getString("text"), indices.getInt(0), indices.getInt(1));
+							list.add(tag);
+						}
+					} catch(JSONException h) {
+						Log.d("JSON","Hashtag Error");
 					}
+
 					
 				}
 				// makes an url object
@@ -126,7 +130,7 @@ public class JSONHandler {
 
 				}
 				
-				Log.d("Check", "Test2");
+			
 				String tweetText = tweet.getString("text");
 				User un = new User(user.getString("screen_name"), user.getString("name"), user.getString("profile_image_url"));
 				Tweet tweetmsg = new Tweet(tweetText,un, list, urlList, mentionList,p);
@@ -141,38 +145,7 @@ public class JSONHandler {
 			e1.printStackTrace();
 		}
 	}
-//	/**
-//	 * Reads the JSON file and turns it into one string and returns this string
-//	 * @param filename
-//	 * @return The JSON file string
-//	 * @throws IOException
-//	 */
-//    @SuppressWarnings("unused")
-//	private String readAssetIntoString(String filename) throws IOException {
-//		BufferedReader br = null;
-//		StringBuilder sb = new StringBuilder();
-// 
-//		String line;
-//		try {
-//			InputStream is = mainActivity.getAssets().open(filename, AssetManager.ACCESS_BUFFER);
-//			br = new BufferedReader(new InputStreamReader(is));
-//			while ((line = br.readLine()) != null) {
-//				sb.append(line);
-//			}
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//            throw e;
-//		} finally {
-//			if (br != null) {
-//				try {
-//					br.close();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//		return sb.toString();		
-//	}
+
     
     public String getToken(String text) {
 		try {
@@ -182,7 +155,7 @@ public class JSONHandler {
 			return access_token;
 		} catch(JSONException e){
 			e.printStackTrace();
-			Log.d("JSON","Media Error");
+			Log.d("JSON","token error");
 		}
 		return null;	
 
