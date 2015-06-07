@@ -160,5 +160,9 @@ public class JSONHandler {
 		return null;	
 
     }
+    
+    public User getUserFromJSON(String JSONcode) {
+    	return null;
+    }
 
 }

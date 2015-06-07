@@ -12,7 +12,7 @@
     tools:context="nl.saxion.twitter_client.MainActivity" >
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textViewWelcome"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:text="Tweetie Twitter App"
