@@ -9,12 +9,15 @@ import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
+import nl.saxion.twitter_client.objects.User;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -37,6 +40,9 @@ public class ConnectionHandler {
 	private static final String ACCESSTOKEN_URL = "https://api.twitter.com/oauth/access_token";
 	private static final String AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize";
 	private static final String CALLBACK_URL = "http://grotekaartenkopen.nl/";
+	
+	private HttpRequestBase requestBase;
+	private String responseString;
 
 	private OAuthProvider provider;
 	private OAuthConsumer consumer;
@@ -128,8 +134,52 @@ public class ConnectionHandler {
 
 	public void signWithUserToken(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
 		assert loggedIn : "User not logged in";
-		consumer.sign(request);
+		requestBase = request;
+		new ReceiveCredentials().execute();
+	
+	
 
+	}
+	public class ReceiveCredentials extends AsyncTask<Void,Void,Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				consumer.sign(requestBase);
+			} catch (OAuthMessageSignerException e1) {
+				Log.d("Response","OAuthMessagerSigner");
+				e1.printStackTrace();
+			} catch (OAuthExpectationFailedException e1) {
+				Log.d("Response","OAuthExpectationFailed");
+				e1.printStackTrace();
+			} catch (OAuthCommunicationException e1) {
+				Log.d("Response","OAuthCommunication error");
+				e1.printStackTrace();
+			}
+			HttpClient client = new DefaultHttpClient();
+			try {
+				//HttpResponse response = client.execute(request);
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	            responseString = client.execute(requestBase, responseHandler);
+	            
+	            Log.d("Response",responseString);
+			} catch (ClientProtocolException e) {
+				Log.d("Response","Client protocol Exception");
+				e.printStackTrace();
+			} catch (IOException e) {
+				Log.d("Response","IO Exception");
+				e.printStackTrace();
+			}
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Void result) {
+			JSONHandler handler = new JSONHandler(model.getMainActivity());
+			User user = handler.getUserFromJSON(responseString);
+			model.setAccount(user);
+			model.setFinishedMakingUser(true);
+		}
+		
 	}
 
 }

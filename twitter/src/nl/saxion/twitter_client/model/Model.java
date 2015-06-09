@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.app.Activity;
 import nl.saxion.twitter_client.ConnectionHandler;
 import nl.saxion.twitter_client.objects.Tweet;
+import nl.saxion.twitter_client.objects.User;
 
 /**
  * The Model Class
@@ -16,6 +18,9 @@ public class Model extends Observable implements Observer {
 	
 	private String authoriseURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";
 	private ConnectionHandler cHandler;
+	private User account;
+	private Activity mainActivity;
+	private boolean isFinishedMakingUser = false;
 
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
 	
@@ -77,5 +82,41 @@ public class Model extends Observable implements Observer {
 	 */
 	public void setcHandler(ConnectionHandler cHandler) {
 		this.cHandler = cHandler;
+	}
+	/**
+	 * @return the account
+	 */
+	public User getAccount() {
+		return account;
+	}
+	/**
+	 * @param account the account to set
+	 */
+	public void setAccount(User account) {
+		this.account = account;
+	}
+	/**
+	 * @return the mainActivity
+	 */
+	public Activity getMainActivity() {
+		return mainActivity;
+	}
+	/**
+	 * @param mainActivity the mainActivity to set
+	 */
+	public void setMainActivity(Activity mainActivity) {
+		this.mainActivity = mainActivity;
+	}
+	/**
+	 * @return the isFinishedMakingUser
+	 */
+	public boolean isFinishedMakingUser() {
+		return isFinishedMakingUser;
+	}
+	/**
+	 * @param isFinishedMakingUser the isFinishedMakingUser to set
+	 */
+	public void setFinishedMakingUser(boolean isFinishedMakingUser) {
+		this.isFinishedMakingUser = isFinishedMakingUser;
 	}
 }

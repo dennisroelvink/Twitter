@@ -38,6 +38,7 @@ public class LoginActivity extends Activity implements Observer {
 		model = app.getModel();
 		model.addObserver(this);
 		webview = new WebView(this);
+		model.setMainActivity(this);
 		webview.getSettings().setJavaScriptEnabled(true);
 		webview.setWebViewClient(new WebViewClient() {
 

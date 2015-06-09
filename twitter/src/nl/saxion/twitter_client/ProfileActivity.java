@@ -26,14 +26,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ProfileActivity extends ActionBarActivity {
 	
 	private ConnectionHandler verify;
 	private Model model;
+	private Button refresh;
 	
 	private TextView twittername;
+	private TextView screenname;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +46,8 @@ public class ProfileActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_profile);
 		
 		twittername = (TextView) findViewById(R.id.textViewTwitterName);
+		screenname = (TextView) findViewById(R.id.textViewScreenName);
+		refresh = (Button) findViewById(R.id.buttonRefresh);
 		
 		TweetApplication app = (TweetApplication) getApplicationContext();
 		model = app.getModel();
@@ -63,6 +70,22 @@ public class ProfileActivity extends ActionBarActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		if(model.isFinishedMakingUser()) {
+			twittername.setText(model.getAccount().getName());
+			screenname.setText(model.getAccount().getUserName());
+		}
+		
+		refresh.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				recreate();
+				
+			}
+			
+		});
+
 
 	}
 

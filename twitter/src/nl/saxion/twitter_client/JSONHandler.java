@@ -162,7 +162,19 @@ public class JSONHandler {
     }
     
     public User getUserFromJSON(String JSONcode) {
-    	return null;
+    	User user = null;
+    	try {
+			JSONObject obj = new JSONObject(JSONcode);
+			obj.getString("name");
+			Log.d("naam",obj.getString("name"));
+			
+			user = new User(obj.getString("screen_name"), obj.getString("name"),  obj.getString("profile_image_url"));
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return user;
     }
+    
 
 }

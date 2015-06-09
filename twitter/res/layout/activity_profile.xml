@@ -8,31 +8,69 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/illuminati"
     tools:context="nl.saxion.twitter_client.ProfileActivity" >
-
-    <TextView
-        android:id="@+id/textViewHeaderProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Illuminati Twitter Client"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
         <TextView
-            android:id="@+id/textViewWelcome"
+            android:id="@+id/textViewHeaderProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welkom " />
+            android:text="Illuminati Twitter Client"
+            android:textSize="28dp"
+            android:textColor="#ffffff"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/textViewTwitterName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#ffffff"
             android:text="NANDA" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textViewScreenName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="screen_name"
+            android:textColor="#ffffff"
+            android:textSize="15dp"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/buttonRefresh"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh" />
 
 </LinearLayout>
