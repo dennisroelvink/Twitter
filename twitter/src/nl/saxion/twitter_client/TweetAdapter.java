@@ -76,6 +76,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 			spannableTweet.setSpan(new ForegroundColorSpan(Color.rgb(247, 149, 49)), UM.getBeginMention(),UM.getEndMention() , 0);
 		}
 		
+		
 		// Photo url link ding
 		Photo pic = tweet.getPhoto();
 		spannableTweet.setSpan(new ForegroundColorSpan(Color.TRANSPARENT), pic.getBeginPhotoURL(), pic.getEndPhotoURL(), 0);

@@ -1,10 +1,13 @@
 package nl.saxion.twitter_client.model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import nl.saxion.twitter_client.ConnectionHandler;
 import nl.saxion.twitter_client.objects.Tweet;
 import nl.saxion.twitter_client.objects.User;
@@ -21,8 +24,11 @@ public class Model extends Observable implements Observer {
 	private User account;
 	private Activity mainActivity;
 	private boolean isFinishedMakingUser = false;
+	private boolean goBackToMain = false;
+
 
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
+	private ArrayList<Tweet> timelineList = new ArrayList<Tweet>();
 	
 	public Model() {
 		setcHandler(new ConnectionHandler());
@@ -39,6 +45,13 @@ public class Model extends Observable implements Observer {
 	}
 	public void deleteAllTweets() {
 		tweetList.clear();
+		setChanged();
+		notifyObservers();
+	}
+	
+	public void addTimelineTweet(Tweet t){
+		timelineList.add(t);
+		t.addObserver(this);
 		setChanged();
 		notifyObservers();
 	}
@@ -119,4 +132,21 @@ public class Model extends Observable implements Observer {
 	public void setFinishedMakingUser(boolean isFinishedMakingUser) {
 		this.isFinishedMakingUser = isFinishedMakingUser;
 	}
+	/**
+	 * @return the goBackToMain
+	 */
+	public boolean isGoBackToMain() {
+		return goBackToMain;
+	}
+	/**
+	 * @param goBackToMain the goBackToMain to set
+	 */
+	public void setGoBackToMain(boolean goBackToMain) {
+		this.goBackToMain = goBackToMain;
+	}
+	public List<Tweet> getTimeLine() {
+		return timelineList;
+
+	}
+
 }

@@ -6,6 +6,7 @@ import java.net.URLEncoder;
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
 import android.support.v7.app.ActionBarActivity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -27,6 +28,8 @@ public class MainActivity extends ActionBarActivity {
 	private TweetAdapter adapter;
 	private SearchView searcher;
 	private URLTool urlTool;
+	
+	private static final String PREFS = "LOGINTOKEN";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +39,13 @@ public class MainActivity extends ActionBarActivity {
 		TweetApplication app = (TweetApplication) getApplicationContext();
 		model = app.getModel();
 		urlTool = new URLTool(this);
+		
+
 
 		searcher = (SearchView) findViewById(R.id.searchViewTweetSearch);
 		listview = (ListView) findViewById(R.id.listViewTweet);
+		
+		
 
 		/**
 		 * Method that will be called when pressing enter

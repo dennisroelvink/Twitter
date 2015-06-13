@@ -3,24 +3,19 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/illuminati"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/illuminati"
     tools:context="nl.saxion.twitter_client.ProfileActivity" >
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-    </LinearLayout>
-
-    <LinearLayout
+        android:id="@+id/LinearLayout2"
         android:layout_width="wrap_content"
-        android:layout_gravity="center"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:orientation="vertical" >
 
         <TextView
@@ -28,49 +23,60 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Illuminati Twitter Client"
-            android:textSize="28dp"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#ffffff"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
-
+            android:textSize="28dp" />
     </LinearLayout>
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="wrap_content" >
 
         <TextView
             android:id="@+id/textViewTwitterName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
+            android:text="NAME"
             android:textColor="#ffffff"
-            android:text="NANDA" />
-    </LinearLayout>
+            android:textSize="20dp" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        <TextView
+            android:id="@+id/textViewHaakje1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text=" ("
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/textViewScreenName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="screen_name"
+            android:text="SCREENNAME"
+            android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="#ffffff"
-            android:textSize="15dp"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/textViewHaakje2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text=")"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonRefresh"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Refresh" />
+    <ListView
+        android:id="@+id/listViewProfileTweets"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>

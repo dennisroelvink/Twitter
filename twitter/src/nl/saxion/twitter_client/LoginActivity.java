@@ -4,11 +4,14 @@ import java.net.URI;
 import java.util.Observable;
 import java.util.Observer;
 
+import oauth.signpost.OAuthConsumer;
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +29,7 @@ public class LoginActivity extends Activity implements Observer {
 	private WebView webview;
 	private ConnectionHandler cHandler;
 	private Model model;
+	private static final String PREFS = "LOGINTOKEN";
 	
 
 	@Override
@@ -59,7 +63,9 @@ public class LoginActivity extends Activity implements Observer {
 					
 					
 					Intent i = new Intent(LoginActivity.this,ProfileActivity.class);
-					i.putExtra("verifier", uri.getQueryParameter("oauth_verifier"));
+					ConnectionHandler verify = model.getcHandler();
+					verify.getConnectionInit(uri.getQueryParameter("oauth_verifier"),model.getMainActivity());
+					//i.putExtra("verifier", uri.getQueryParameter("oauth_verifier"));
 					startActivity(i);
 					return true;
 				} else {
@@ -93,13 +99,21 @@ public class LoginActivity extends Activity implements Observer {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-
 	@Override
 	public void update(Observable observable, Object data) {
 		webview.loadUrl(model.getAuthoriseURL());
 		setContentView(webview);
 		webview.loadUrl(model.getAuthoriseURL());
 		setContentView(webview);
+	}
+	@Override
+	protected void onResume() {
+		if(model.isGoBackToMain()) {
+			finish();
+			model.setGoBackToMain(false);
+			
+		}
+		super.onResume();
 	}
 
 }

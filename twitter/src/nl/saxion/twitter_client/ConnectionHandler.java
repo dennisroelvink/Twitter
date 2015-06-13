@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Observable;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -17,6 +19,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
+import nl.saxion.twitter_client.objects.Tweet;
 import nl.saxion.twitter_client.objects.User;
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -31,7 +34,7 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
 import oauth.signpost.http.HttpRequest;
 
-public class ConnectionHandler {
+public class ConnectionHandler extends Observable {
 
 	private static final String CONSUMER_KEY = "qmQ1kDhXeaBFIp5Hran1XZZ9M";
 	private static final String CONSUMER_SECRET = "r9YIzFiKAruyes2xNAFBSiDPgkA3TlcNqYDBUblcuUvlbtB0Y6";
@@ -42,7 +45,8 @@ public class ConnectionHandler {
 	private static final String CALLBACK_URL = "http://grotekaartenkopen.nl/";
 	
 	private HttpRequestBase requestBase;
-	private String responseString;
+	private String responseString = "";
+	private HttpRequestBase requestBaseTimeline ;
 
 	private OAuthProvider provider;
 	private OAuthConsumer consumer;
@@ -56,6 +60,10 @@ public class ConnectionHandler {
 		consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 		provider = new CommonsHttpOAuthProvider(REQUEST_TOKEN_URL,
 				ACCESSTOKEN_URL, AUTHORIZE_URL);
+	}
+	public OAuthConsumer getConsumer(){
+		return consumer;
+		
 	}
 
 	public boolean isUserLoggedIn() {
@@ -88,7 +96,7 @@ public class ConnectionHandler {
 		protected Void doInBackground(Void... params) {
 			try {
 				url = provider.retrieveRequestToken(consumer, CALLBACK_URL);
-				Log.d("URL", url);
+				Log.d("Katy Perry2", url);
 
 			} catch (OAuthMessageSignerException e) {
 				Log.d("Retrieve Error", "OAuthMessageSignerException");
@@ -114,7 +122,11 @@ public class ConnectionHandler {
 		protected Void doInBackground(Void... params) {
 			try {
 				Log.d("TOKEN", verifyCode);
+				Log.d("Jim",consumer.getToken());
 				provider.retrieveAccessToken(consumer, verifyCode);
+				
+				Log.d("Jim",consumer.getToken());
+				
 				loggedIn = true;
 				Log.d("TOKEN2", verifyCode);
 				Log.d("TOKEN3", consumer.getToken());
@@ -137,8 +149,12 @@ public class ConnectionHandler {
 		requestBase = request;
 		new ReceiveCredentials().execute();
 	
-	
-
+	}
+	public void signWithUserTokenTimeline(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
+		assert loggedIn : "User not logged in";
+		requestBaseTimeline = request;
+		new ReceiveTimeline().execute();
+		
 	}
 	public class ReceiveCredentials extends AsyncTask<Void,Void,Void> {
 
@@ -147,39 +163,90 @@ public class ConnectionHandler {
 			try {
 				consumer.sign(requestBase);
 			} catch (OAuthMessageSignerException e1) {
-				Log.d("Response","OAuthMessagerSigner");
+				Log.d("SResponse","OAuthMessagerSigner");
 				e1.printStackTrace();
 			} catch (OAuthExpectationFailedException e1) {
-				Log.d("Response","OAuthExpectationFailed");
+				Log.d("SResponse","OAuthExpectationFailed");
 				e1.printStackTrace();
 			} catch (OAuthCommunicationException e1) {
-				Log.d("Response","OAuthCommunication error");
+				Log.d("SResponse","OAuthCommunication error");
 				e1.printStackTrace();
 			}
 			HttpClient client = new DefaultHttpClient();
 			try {
-				//HttpResponse response = client.execute(request);
+			
+				
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 	            responseString = client.execute(requestBase, responseHandler);
 	            
-	            Log.d("Response",responseString);
+	            //Log.d("CResponse",responseString);
 			} catch (ClientProtocolException e) {
-				Log.d("Response","Client protocol Exception");
+				Log.d("CResponse","Client protocol Exception");
 				e.printStackTrace();
 			} catch (IOException e) {
-				Log.d("Response","IO Exception");
+				Log.d("CResponse","IO Exception");
 				e.printStackTrace();
 			}
 			return null;
 		}
 		@Override
 		protected void onPostExecute(Void result) {
+			Log.d("Onpost",""+responseString);
 			JSONHandler handler = new JSONHandler(model.getMainActivity());
 			User user = handler.getUserFromJSON(responseString);
 			model.setAccount(user);
 			model.setFinishedMakingUser(true);
+			setChanged();
+			notifyObservers();
 		}
 		
+	}
+	public class ReceiveTimeline extends AsyncTask<Void,Void,Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				consumer.sign(requestBaseTimeline);
+			} catch (OAuthMessageSignerException e1) {
+				Log.d("SResponse","OAuthMessagerSigner");
+				e1.printStackTrace();
+			} catch (OAuthExpectationFailedException e1) {
+				Log.d("SResponse","OAuthExpectationFailed");
+				e1.printStackTrace();
+			} catch (OAuthCommunicationException e1) {
+				Log.d("SResponse","OAuthCommunication error");
+				e1.printStackTrace();
+			}
+			HttpClient client = new DefaultHttpClient();
+			try {
+			
+				
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	            responseString = client.execute(requestBaseTimeline, responseHandler);
+	            
+	            //Log.d("CResponse",responseString);
+			} catch (ClientProtocolException e) {
+				Log.d("CResponse","Client protocol Exception");
+				e.printStackTrace();
+			} catch (IOException e) {
+				Log.d("CResponse","IO Exception");
+				e.printStackTrace();
+			}
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Void result) {
+			Log.d("Onpost2",""+responseString);
+			JSONHandler handler = new JSONHandler(model.getMainActivity());
+			ArrayList<Tweet> list = handler.JSONToTimeLine(responseString);
+			//model.setTimeline(list);
+			setChanged();
+			notifyObservers();
+		}
+		
+	}
+	public String getResponseString() {
+		return this.responseString;
 	}
 
 }

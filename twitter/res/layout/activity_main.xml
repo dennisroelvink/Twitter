@@ -15,7 +15,7 @@
         android:id="@+id/textViewWelcome"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="Tweetie Twitter App"
+        android:text="Illuminati Twitter App"
         android:textColor="#ffffff"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

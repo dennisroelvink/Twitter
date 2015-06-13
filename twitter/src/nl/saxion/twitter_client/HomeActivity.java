@@ -1,8 +1,13 @@
 package nl.saxion.twitter_client;
 
+import oauth.signpost.OAuthConsumer;
+import nl.saxion.twitter_client.model.Model;
+import nl.saxion.twitter_client.model.TweetApplication;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,14 +18,30 @@ public class HomeActivity extends ActionBarActivity {
 
 	private Button login;
 	private Button guest;
+	private Model model;
+	private static final String PREFS = "LOGINTOKEN";
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		
+		TweetApplication app = (TweetApplication) getApplication();
+		model = app.getModel();
+		OAuthConsumer consumer = model.getcHandler().getConsumer();
 		login = (Button) findViewById(R.id.buttonLogin);
 		guest = (Button) findViewById(R.id.buttonGuest);
+		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
+		String token = prefs.getString("token", "");
+		String secret = prefs.getString("tokenSecret", "");
+		Log.d("Putt",prefs.getString("token", ""));
+		Log.d("Putt",prefs.getString("tokenSecret", ""));
+		//TODO '=' veranderen in !
+		if(token.length() == 0 && secret.length() !=0) {
+			consumer.setTokenWithSecret(token,	secret);
+			Log.d("Putt",consumer.getToken());
+			Intent i = new Intent(HomeActivity.this,ProfileActivity.class);
+			startActivity(i);
+		}
 		
 		login.setOnClickListener(new OnClickListener() {
 			
