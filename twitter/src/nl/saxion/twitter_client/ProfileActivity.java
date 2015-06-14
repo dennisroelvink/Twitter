@@ -1,5 +1,7 @@
 package nl.saxion.twitter_client;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -14,10 +16,17 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 
 
 
+
+
+
+
+
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -36,9 +45,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+/**
+ * The profile activity class
+ * @author Sharon
+ *
+ */
 public class ProfileActivity extends ActionBarActivity implements Observer {
 	
 	private ConnectionHandler verify;
@@ -48,8 +65,15 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 	private TextView twittername;
 	private TextView screenname;
 	private ListView tweetList;
+	private ImageView profilePic;
 	private TweetAdapter adapter;
 	private JSONHandler handler;
+	private TextView tweetsSent;
+	private TextView following;
+	private TextView followers;
+	private Button postTweet;
+	private EditText tweetText;
+	private Button refresh;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +83,13 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 		twittername = (TextView) findViewById(R.id.textViewTwitterName);
 		screenname = (TextView) findViewById(R.id.textViewScreenName);
 		tweetList = (ListView) findViewById(R.id.listViewProfileTweets);
+		profilePic = (ImageView) findViewById(R.id.imageViewProfilePicProfile);
+		tweetsSent = (TextView) findViewById(R.id.textViewTweetsSent);
+		following = (TextView) findViewById(R.id.textViewFollowing);
+		followers = (TextView) findViewById(R.id.textViewFollowers);
+		postTweet = (Button) findViewById(R.id.buttonPostTweet);
+		tweetText = (EditText) findViewById(R.id.editTextNewTweet);
+		refresh = (Button) findViewById(R.id.buttonRefresh);
 		
 		
 		TweetApplication app = (TweetApplication) getApplicationContext();
@@ -67,6 +98,7 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 		adapter = new TweetAdapter(this, R.layout.tweet, model.getTimeLine());
 		tweetList.setAdapter(adapter);
 		model.addObserver(adapter);
+		model.addObserver(this);
 		
 		OAuthConsumer c = model.getcHandler().getConsumer();
 		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
@@ -80,13 +112,48 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 		model.getcHandler().addObserver(this);
 		
 		handler = new JSONHandler(this);
-		//handler.JSONToTimeLine(JSONText);
+
 		
 		HttpGet httpGetUser = new HttpGet("https://api.twitter.com/1.1/account/verify_credentials.json");
 		HttpGet httpGetTimeline = new HttpGet("https://api.twitter.com/1.1/statuses/home_timeline.json");
 		
+		postTweet.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				String query = tweetText.getText().toString();
+				String post = "";
+				if(query.length() != 0) {
+					try {
+						post = URLEncoder.encode(query, "UTF-8");
+					} catch (UnsupportedEncodingException e1) {
+						Log.d("Encoded error","couldn't encode tweet text");
+					}
+					HttpPost httpPostTweet = new HttpPost("https://api.twitter.com/1.1/statuses/update.json?status=" + post);
+					try {
+						verify.signWithUserTokenNewTweet(httpPostTweet);
+						tweetText.setText("");
+					} catch (OAuthMessageSignerException e) {
+						Log.d("Error"," Message Signer Profile Activity");
+						e.printStackTrace();
+					} catch (OAuthExpectationFailedException e) {
+						Log.d("Error"," Expectation Failed Profile Activity");
+						e.printStackTrace();
+					} catch (OAuthCommunicationException e) {
+						Log.d("Error"," Communication Exception Profile Activity");
+						e.printStackTrace();
+					}
+				} else {
+					Toast.makeText(getApplicationContext(), "Invalid tweet input", Toast.LENGTH_SHORT).show();
+				}
+				
+				
+			}
+		});
+		
+		
 		try {
-			verify.signWithUserToken(httpGetUser);
+			verify.signWithUserTokenCredentials(httpGetUser);
 			verify.signWithUserTokenTimeline(httpGetTimeline);
 		} catch (OAuthMessageSignerException e) {
 			Log.d("Error"," Message Signer Profile Activity");
@@ -98,18 +165,18 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 			Log.d("Error"," Communication Exception Profile Activity");
 			e.printStackTrace();
 		}
-		
-		if(model.isFinishedMakingUser()) {
-			twittername.setText(model.getAccount().getName());
-			screenname.setText(model.getAccount().getUserName());
-			
-			
-		}
-			
-		
 
-
+		refresh.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				model.deleteTimeLine();
+				recreate();
+				
+			}
+		});
 	}
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,16 +194,39 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 		if (id == R.id.action_settings) {
 			return true;
 		} else if (id == R.id.action_logout) {
+			model.getcHandler().getConsumer().setTokenWithSecret(null, null);
 			model.setGoBackToMain(true);
+			model.deleteTimeLine();
 			finish();
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	@Override
+	public void onBackPressed() {
+		model.getcHandler().getConsumer().setTokenWithSecret(null, null);
+		model.setGoBackToMain(true);
+		model.deleteTimeLine();
+		finish();
+		super.onBackPressed();
+	}
 
 	@Override
 	public void update(Observable observable, Object data) {
-		twittername.setText(model.getAccount().getName());
-		screenname.setText(model.getAccount().getUserName());
+		if(model.getAccount().getName().length() == 0) {
+			Toast.makeText(getApplicationContext(), "There was an Error", Toast.LENGTH_SHORT).show();
+			model.getcHandler().getConsumer().setTokenWithSecret(null, null);
+			model.setGoBackToMain(true);
+			model.deleteTimeLine();
+			finish();
+		} else {
+			twittername.setText(model.getAccount().getName());
+			screenname.setText(model.getAccount().getUserName());
+			profilePic.setImageBitmap(model.getAccount().getBitmap());
+			tweetsSent.setText(model.getAccount().getTweetsSent());
+			followers.setText(model.getAccount().getFollowers());
+			following.setText(model.getAccount().getFollowing());
+		}
+
 		
 	}
 }

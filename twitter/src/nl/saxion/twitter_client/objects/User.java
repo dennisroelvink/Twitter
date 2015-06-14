@@ -21,7 +21,11 @@ public class User extends Observable{
 	private String name;
 	private String userName;
 	private String profilePhotoUrl;
+	private String tweetsSent = "";
+	private String following = "";
+	private String followers = "";
 	private Bitmap bitmap;
+	
 	/**
 	 * Constructor of the User class
 	 * @param userName username of the twitteruser
@@ -35,7 +39,43 @@ public class User extends Observable{
 		new URLHandler().execute();
 	}
 	
+	/**
+	 * Constructor of the User class
+	 * @param userName username of the twitteruser
+	 * @param name name of the twitteruser
+	 * @param photo profile picture of the twitteruser
+	 * @param followers amount of followers
+	 * @param following amount of people who the user follows
+	 * @param friends amount of friends
+	 */
+	public User (String userName, String name, String photo, String followers, String following, String tweets) {
+		this.name = name;
+		this.userName = userName;
+		this.setProfilePhotoUrl(photo);
+		this.tweetsSent = tweets;
+		this.followers = followers;
+		this.following = following;
+		new URLHandler().execute();
+	}
 
+	/**
+	 * @return the friends
+	 */
+	public String getTweetsSent() {
+		return tweetsSent;
+	}
+	/**
+	 * @return the following
+	 */
+	public String getFollowing() {
+		return following;
+	}
+	/**
+	 * @return the followers
+	 */
+	public String getFollowers() {
+		return followers;
+	}
 	/**
 	 * @return the userID
 	 */
@@ -107,6 +147,7 @@ public class User extends Observable{
 		setChanged();
 		notifyObservers();
 	}
+	
 	/**
 	 * The URLHandler class
 	 * @author Sharon and Dennis
@@ -136,6 +177,8 @@ public class User extends Observable{
 		@Override
 		protected void onPostExecute(Void result) {
 			setBitmap(bitmap);
+			setChanged();
+			notifyObservers();
 			super.onPostExecute(result);
 		}
 	}

@@ -1,6 +1,7 @@
 package nl.saxion.twitter_client;
 
 import oauth.signpost.OAuthConsumer;
+import oauth.signpost.signature.OAuthMessageSigner;
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
 import android.support.v7.app.ActionBarActivity;
@@ -37,6 +38,7 @@ public class HomeActivity extends ActionBarActivity {
 		Log.d("Putt",prefs.getString("tokenSecret", ""));
 		//TODO '=' veranderen in !
 		if(token.length() == 0 && secret.length() !=0) {
+			
 			consumer.setTokenWithSecret(token,	secret);
 			Log.d("Putt",consumer.getToken());
 			Intent i = new Intent(HomeActivity.this,ProfileActivity.class);

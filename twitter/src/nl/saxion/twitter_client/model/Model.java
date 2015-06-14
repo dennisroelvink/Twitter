@@ -21,7 +21,7 @@ public class Model extends Observable implements Observer {
 	
 	private String authoriseURL = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&autoplay=1";
 	private ConnectionHandler cHandler;
-	private User account;
+	private User account = new User("", "", "");
 	private Activity mainActivity;
 	private boolean isFinishedMakingUser = false;
 	private boolean goBackToMain = false;
@@ -30,9 +30,11 @@ public class Model extends Observable implements Observer {
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
 	private ArrayList<Tweet> timelineList = new ArrayList<Tweet>();
 	
+	
 	public Model() {
 		setcHandler(new ConnectionHandler());
 	}
+	
 	/**
 	 * Adds a tweet to the arraylist tweetList
 	 * @param tweet
@@ -43,17 +45,31 @@ public class Model extends Observable implements Observer {
 		setChanged();
 		notifyObservers();
 	}
+	
+	/**
+	 * Clears the tweetlist
+	 */
 	public void deleteAllTweets() {
 		tweetList.clear();
 		setChanged();
 		notifyObservers();
 	}
 	
+	/**
+	 * Adds a tweet to the timeline arraylist
+	 * @param t tweet object
+	 */
 	public void addTimelineTweet(Tweet t){
 		timelineList.add(t);
 		t.addObserver(this);
 		setChanged();
 		notifyObservers();
+	}
+	/**
+	 * Clears the timline arraylist
+	 */
+	public void deleteTimeLine() {
+		timelineList.clear();
 	}
 	
 	/**
@@ -76,6 +92,7 @@ public class Model extends Observable implements Observer {
 	public String getAuthoriseURL() {
 		return authoriseURL;
 	}
+	
 	/**
 	 * @param authoriseURL the authoriseURL to set
 	 */
@@ -84,66 +101,81 @@ public class Model extends Observable implements Observer {
 		setChanged();
 		notifyObservers();
 	}
+	
 	/**
 	 * @return the cHandler
 	 */
 	public ConnectionHandler getcHandler() {
 		return cHandler;
 	}
+	
 	/**
 	 * @param cHandler the cHandler to set
 	 */
 	public void setcHandler(ConnectionHandler cHandler) {
 		this.cHandler = cHandler;
 	}
+	
 	/**
 	 * @return the account
 	 */
 	public User getAccount() {
 		return account;
 	}
+	
 	/**
 	 * @param account the account to set
 	 */
 	public void setAccount(User account) {
 		this.account = account;
 	}
+	
 	/**
 	 * @return the mainActivity
 	 */
 	public Activity getMainActivity() {
 		return mainActivity;
 	}
+	
 	/**
 	 * @param mainActivity the mainActivity to set
 	 */
 	public void setMainActivity(Activity mainActivity) {
 		this.mainActivity = mainActivity;
 	}
+	
 	/**
 	 * @return the isFinishedMakingUser
 	 */
 	public boolean isFinishedMakingUser() {
 		return isFinishedMakingUser;
 	}
+	
 	/**
 	 * @param isFinishedMakingUser the isFinishedMakingUser to set
 	 */
 	public void setFinishedMakingUser(boolean isFinishedMakingUser) {
 		this.isFinishedMakingUser = isFinishedMakingUser;
 	}
+	
 	/**
 	 * @return the goBackToMain
 	 */
 	public boolean isGoBackToMain() {
 		return goBackToMain;
 	}
+	
 	/**
 	 * @param goBackToMain the goBackToMain to set
 	 */
 	public void setGoBackToMain(boolean goBackToMain) {
 		this.goBackToMain = goBackToMain;
 	}
+	
+	/**
+	 * Returns an arraylist with tweet object for the timeline
+	 * @return timlineList
+	 */
 	public List<Tweet> getTimeLine() {
 		return timelineList;
 

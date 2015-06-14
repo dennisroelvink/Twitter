@@ -7,12 +7,14 @@ import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
 import android.support.v7.app.ActionBarActivity;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -45,7 +47,7 @@ public class MainActivity extends ActionBarActivity {
 		searcher = (SearchView) findViewById(R.id.searchViewTweetSearch);
 		listview = (ListView) findViewById(R.id.listViewTweet);
 		
-		
+	
 
 		/**
 		 * Method that will be called when pressing enter

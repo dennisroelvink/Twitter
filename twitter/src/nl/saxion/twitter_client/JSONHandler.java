@@ -40,118 +40,48 @@ public class JSONHandler {
 	 * @param filename
 	 */
 	public void JSONToTweet(String test) {
-		try {
-
-			JSONObject obj = new JSONObject(test);
-
-			JSONArray tweets = obj.getJSONArray("statuses");
-			Log.d("Check", "Test1");
-			for (int i = 0; i < tweets.length(); i++) {
+		JSONObject obj = getObject(test);
+		JSONArray tweets = getArray(obj, "statuses");
+		for(int i = 0; i < tweets.length();i++) {
+			try {
 				JSONObject tweet = tweets.getJSONObject(i);
-				Log.d("tweet", tweet.toString());
-				JSONObject user = tweet.getJSONObject("user");
-				Log.d("user", user.toString());
-				JSONObject entity = tweet.getJSONObject("entities");
-				Log.d("entity", entity.toString());
-				JSONArray hashtags = entity.getJSONArray("hashtags");
-				Log.d("hashtags", hashtags.toString());
-				JSONArray urls = entity.getJSONArray("urls");
-				Log.d("urls", urls.toString());
-				JSONArray userMentions = entity.getJSONArray("user_mentions");
-				Log.d("usermentions", userMentions.toString());
+				JSONObject user = getUserObject(tweet);
+				JSONObject entity = getEntityObject(tweet);
+				JSONArray user_mentions = getArray(entity, "user_mentions");
+				JSONArray urls = getArray(entity, "urls");
+				JSONArray hashtags = getArray(entity, "hashtags");
+				
+				// makes a photo if possible
 				Photo p = new Photo("", 0, 0);
-				try {
+				try{
 					JSONArray media = entity.getJSONArray("media");
-
-					for (int a = 0; a < media.length(); a++) {
-						JSONObject med = media.getJSONObject(a);
-						JSONArray indices = med.getJSONArray("indices");
-						if (indices.length() != 0) {
-							p.setPhotoURL(med.getString("media_url"));
-							p.setBeginPhotoURL(indices.getInt(0));
-							p.setEndPhotoURL(indices.getInt(1));
-
-						}
-						Log.d("MEDIA", med.getString("media_url"));
-					}
-				} catch (JSONException e) {
-					e.printStackTrace();
-					Log.d("JSON", "Media Error");
+					p = getPhotoFromMedia(media);
+				} catch(JSONException e) {
+					
 				}
-
-				ArrayList<Hashtag> hashTaglist = new ArrayList<Hashtag>();
-				ArrayList<Url> urlList = new ArrayList<Url>();
-				ArrayList<UserMention> mentionList = new ArrayList<UserMention>();
-
-				// makes a hashtag object
-				for (int j = 0; j < hashtags.length(); j++) {
-					try {
-						JSONObject hashtag = hashtags.getJSONObject(j);
-						JSONArray indices = hashtag.getJSONArray("indices");
-
-						if (indices.length() != 0) {
-							Hashtag tag = new Hashtag(
-									hashtag.getString("text"),
-									indices.getInt(0), indices.getInt(1));
-							hashTaglist.add(tag);
-						}
-					} catch (JSONException h) {
-						Log.d("JSON", "Hashtag Error");
-					}
-
-				}
-				// makes an url object
-				for (int k = 0; k < urls.length(); k++) {
-					try {
-						JSONObject url = urls.getJSONObject(k);
-						JSONArray indices = url.getJSONArray("indices");
-
-						if (indices.length() != 0) {
-							Url u = new Url(url.getString("url"),
-									indices.getInt(0), indices.getInt(1));
-							urlList.add(u);
-						}
-					} catch (JSONException e) {
-						Log.d("JSON", "URL Error");
-						e.printStackTrace();
-					}
-
-				}
-				// makes an user mention object
-				for (int l = 0; l < userMentions.length(); l++) {
-					try {
-						JSONObject userMention = userMentions.getJSONObject(l);
-						JSONArray indices = userMention.getJSONArray("indices");
-						if (indices.length() != 0) {
-							UserMention UM = new UserMention(
-									userMention.getString("screen_name"),
-									indices.getInt(0), indices.getInt(1));
-							mentionList.add(UM);
-						}
-					} catch (JSONException e) {
-						Log.d("JSON", "User Mention Error");
-						e.printStackTrace();
-					}
-
-				}
-
-				String tweetText = tweet.getString("text");
-				User un = new User(user.getString("screen_name"),
-						user.getString("name"),
-						user.getString("profile_image_url"));
-				Tweet tweetmsg = new Tweet(tweetText, un, hashTaglist, urlList,
-						mentionList, p);
+				
+				
+				ArrayList<Hashtag> hashtagList = getHashtagList(hashtags);
+				ArrayList<Url> urlList = getUrlList(urls);
+				ArrayList<UserMention> usermentionList = getUserMentionList(user_mentions);
+				String tweetText = getTweetText(tweet);
+				User un = new User(user.getString("screen_name"),user.getString("name"),user.getString("profile_image_url"));
+				Tweet tweetmsg = new Tweet(tweetText, un, hashtagList, urlList, usermentionList, p);
 				un.addObserver(tweetmsg);
 				model.addTweet(tweetmsg);
-
+				
+			} catch (JSONException e) {
+				Log.d("JSON Error","Couldn't get tweet from tweetsObject");
 			}
-
-		} catch (JSONException e1) {
-			Log.d("error", "reading error");
-			e1.printStackTrace();
 		}
+			
 	}
 
+	/**
+	 * Returns the access token as string
+	 * @param text jsontext
+	 * @return access token
+	 */
 	public String getToken(String text) {
 		try {
 			JSONObject token = new JSONObject(text);
@@ -166,70 +96,75 @@ public class JSONHandler {
 
 	}
 
+	/**
+	 * Get user object from jsontext
+	 * @param JSONcode  jsontext
+	 * @return user object
+	 */
 	public User getUserFromJSON(String JSONcode) {
-		User user = null;
+		User user = new User("", "", "");
 		try {
 			JSONObject obj = new JSONObject(JSONcode);
 			obj.getString("name");
 			Log.d("naam", obj.getString("name"));
 
 			user = new User(obj.getString("screen_name"),
-					obj.getString("name"), obj.getString("profile_image_url"));
+					obj.getString("name"), obj.getString("profile_image_url"), obj.getString("followers_count"), obj.getString("friends_count"),obj.getString("statuses_count"));
+			
+			user.addObserver(model);
 		} catch (JSONException e) {
 			Log.d("JSON Error", "Couldn't retrieve user jsoncode");
 			e.printStackTrace();
 		}
 		return user;
 	}
-
-	public ArrayList<Tweet> JSONToTimeLine(String JSONText) {
-		ArrayList<Tweet> timeline = new ArrayList<Tweet>();
+	/**
+	 * Reading json for the profile timeline
+	 * @param JSONText
+	 */
+	public void JSONToTimeLine(String JSONText) {
+		
 		try {
 			JSONArray tweets = getTweets(JSONText);
 			for (int i = 0; i < tweets.length(); i++) {
 				JSONObject tweet = tweets.getJSONObject(i);
+				JSONObject user = getUserObject(tweet);
 				JSONObject entity = getEntityObject(tweet);
-				JSONArray hashtags = entity.getJSONArray("hashtags");
-				JSONArray urls = entity.getJSONArray("urls");
-				JSONArray userMentions = entity.getJSONArray("user_mentions");
-				
-				//Log.d("HashTags array", ""+getHashtagObject(hashtags));
-				Log.d("Dimitri",getTweetText(tweet));
-				
-				
-//				JSONObject entity = tweetText.getJSONObject("entities");
-//
-//				JSONObject user = tweetText.getJSONObject("user");
-//				Log.d("tweetuser", user.toString());
-//				JSONArray hashtags = entity.getJSONArray("hashtags");
-//				Log.d("tweethashtags", hashtags.toString());
-//				JSONArray urls = entity.getJSONArray("urls");
-//				Log.d("tweeturls", urls.toString());
-//				JSONArray userMentions = entity.getJSONArray("user_mentions");
-//				Log.d("tweetusermentions", userMentions.toString());
-//				JSONArray media = entity.getJSONArray("media");
-//				Log.d("tweetMedia", entity.toString());
-//
-//				// JSONObject retweetedCount = tlt.getJSONObject(i);
-//				Log.d("tweetText", tweetText.getString("text"));
-//				Log.d("tweetRetweeted count",
-//						"" + tweetText.getString("retweeted"));
-//				Log.d("tweetEntity", "" + entity.toString());
+				JSONArray user_mentions = getArray(entity, "user_mentions");
+				JSONArray urls = getArray(entity, "urls");
+				JSONArray hashtags = getArray(entity, "hashtags");
 
-				//User un = new User("", "", "");
-				//Tweet tweetmsg = new Tweet(tweetText.getString("text"),un,
-				// list, urlList, mentionList,p);
-				// un.addObserver(tweetmsg);
-				// model.addTimelineTweet(tweetmsg);
+				ArrayList<Hashtag> hashtagList = getHashtagList(hashtags);
+				ArrayList<Url> urlList = getUrlList(urls);
+				ArrayList<UserMention> usermentionList = getUserMentionList(user_mentions);
+				Photo p = new Photo("", 0, 0);
+				try{
+					JSONArray media = entity.getJSONArray("media");
+					p = getPhotoFromMedia(media);
+				} catch(JSONException e) {
+					
+				}
+
+				Log.d("Dimitri", getTweetText(tweet));
+				
+				User un = new User(user.getString("screen_name"), user.getString("name"),user.getString("profile_image_url"));
+				Tweet t = new Tweet(tweet.getString("text"), un, hashtagList, urlList, usermentionList, p);
+				un.addObserver(t);
+				model.addTimelineTweet(t);
+				
 			}
 
 		} catch (JSONException e) {
 			Log.d("JSON Error", "Couldn't retrieve timeline array");
 		}
-		return timeline;
 	}
 
-	public JSONObject getObject(String JSONText) {
+	/**
+	 * Making a json object from jsontext
+	 * @param JSONText
+	 * @return json object
+	 */
+	private JSONObject getObject(String JSONText) {
 
 		JSONObject obj = null;
 		try {
@@ -240,10 +175,32 @@ public class JSONHandler {
 		return obj;
 	}
 	
-	public JSONArray getArray(JSONObject obj, String JSONText){
-		//TODO
+	/**
+	 * Making an user object from json text
+	 * @param tweet tweet object
+	 * @return json user object
+	 */
+	private JSONObject getUserObject(JSONObject tweet) {
+
+		JSONObject obj = null;
+		try {
+			obj = tweet.getJSONObject("user");
+		} catch (JSONException e) {
+			Log.d("JSON error", "Couldn't create json object");
+		}
+		return obj;
+	}
+
+	/**
+	 * Makes an arrayobject from json text
+	 * @param obj jsonobject
+	 * @param JSONText jsontext
+	 * @return jsonarray object
+	 */
+	private JSONArray getArray(JSONObject obj, String JSONText)  {
+
 		JSONArray a = null;
-		
+
 		try {
 			a = obj.getJSONArray(JSONText);
 			return a;
@@ -251,12 +208,17 @@ public class JSONHandler {
 			Log.d("JSON error handler", "couldn't get an array object");
 			e.printStackTrace();
 		}
-		
+
 		return a;
-		
+
 	}
 
-	public JSONArray getTweets(String JSONText) {
+	/**
+	 * Returns a jsonarray with tweets
+	 * @param JSONText jsontext
+	 * @return tweets
+	 */
+	private JSONArray getTweets(String JSONText) {
 
 		JSONArray obj = null;
 		try {
@@ -266,47 +228,141 @@ public class JSONHandler {
 			Log.d("JSON error", "Couldn't create json array");
 		}
 		return obj;
-		
+
 	}
-	public String getTweetText(JSONObject obj) {
+
+	/**
+	 * Returns a string with the tweet text
+	 * @param obj jsonobject
+	 * @return tweet text
+	 */
+	private String getTweetText(JSONObject obj) {
 		String text = null;
 		try {
 			text = obj.getString("text");
 		} catch (JSONException e) {
-			Log.d("JSON Error","Can't get Tweet Text");
+			Log.d("JSON Error", "Can't get Tweet Text");
 		}
 		return text;
 	}
-	public JSONObject getEntityObject(JSONObject tweet) {
+
+	/**
+	 * Returns an entity object
+	 * @param tweet jsonObject tweet
+	 * @return entity jsonobject
+	 */
+	private JSONObject getEntityObject(JSONObject tweet) {
 		JSONObject obj = null;
 		try {
 			obj = tweet.getJSONObject("entities");
 		} catch (JSONException e) {
-			Log.d("JSON Error","Can't get Entity object");
+			Log.d("JSON Error", "Can't get Entity object");
 		}
 		return obj;
 	}
-	
-	public ArrayList<Hashtag> getHashtagObject(JSONArray hashtags){
-		//TODO
+
+	/**
+	 * Returns arraylist with hashtags
+	 * @param hashtags jsonarray with hastags
+	 * @return list with hastags
+	 */
+	private ArrayList<Hashtag> getHashtagList(JSONArray hashtags) {
 		ArrayList<Hashtag> hashTaglist = new ArrayList<Hashtag>();
-		
-		for (int j = 0; j < hashtags.length(); j++) {
+
+		for (int i = 0; i < hashtags.length(); i++) {
 			try {
-				JSONObject hashtag = hashtags.getJSONObject(j);
+				JSONObject hashtag = hashtags.getJSONObject(i);
 				JSONArray indices = hashtag.getJSONArray("indices");
 
 				if (indices.length() != 0) {
-					Hashtag tag = new Hashtag(
-							hashtag.getString("text"),
+					Hashtag tag = new Hashtag(hashtag.getString("text"),
 							indices.getInt(0), indices.getInt(1));
 					hashTaglist.add(tag);
 				}
 			} catch (JSONException h) {
-				Log.d("JSON", "Hashtag Error");
+				Log.d("JSON Error", "Can't get hashtag from JSON");
 			}
 		}
 		return hashTaglist;
 	}
+
+	/**
+	 * Returns arraylist with urls
+	 * @param urls jsonarray with urls
+	 * @return arraylist with urls
+	 */
+	private ArrayList<Url> getUrlList(JSONArray urls) {
+		ArrayList<Url> urlList = new ArrayList<Url>();
+
+		for (int k = 0; k < urls.length(); k++) {
+			try {
+				JSONObject url = urls.getJSONObject(k);
+				JSONArray indices = url.getJSONArray("indices");
+
+				if (indices.length() != 0) {
+					Url u = new Url(url.getString("url"), indices.getInt(0),
+							indices.getInt(1));
+					urlList.add(u);
+				}
+			} catch (JSONException e) {
+				Log.d("JSON Error", "Can't get url from JSON");
+				e.printStackTrace();
+			}
+
+		}
+		return urlList;
+	}
 	
+	/**
+	 * Returns arraylist with user mentions
+	 * @param userMentions jsonarray with user mentions
+	 * @return usermentions in an arraylist
+	 */
+	private ArrayList<UserMention> getUserMentionList(JSONArray userMentions){
+		ArrayList<UserMention> mentionList = new ArrayList<UserMention>();
+		
+		for (int l = 0; l < userMentions.length(); l++) {
+			try {
+				JSONObject userMention = userMentions.getJSONObject(l);
+				JSONArray indices = userMention.getJSONArray("indices");
+				if (indices.length() != 0) {
+					UserMention UM = new UserMention(
+							userMention.getString("screen_name"),
+							indices.getInt(0), indices.getInt(1));
+					mentionList.add(UM);
+				}
+			} catch (JSONException e) {
+				Log.d("JSON Error", "Can't get user_mention from JSON");
+				e.printStackTrace();
+			}
+
+		}
+		return mentionList;
+	}
+	
+	/**
+	 * returns a photo from a tweet
+	 * @param media jsonarray with media
+	 * @return a photo
+	 */
+	private Photo getPhotoFromMedia(JSONArray media) {
+		Photo p = new Photo("", 0, 0);
+		try {
+			for (int a = 0; a < media.length(); a++) {
+				JSONObject med = media.getJSONObject(a);
+				JSONArray indices = med.getJSONArray("indices");
+				if (indices.length() != 0) {
+					p.setPhotoURL(med.getString("media_url"));
+					p.setBeginPhotoURL(indices.getInt(0));
+					p.setEndPhotoURL(indices.getInt(1));
+
+				}
+				Log.d("MEDIA", med.getString("media_url"));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			Log.d("JSON Error", "Couldn't get Media");
+		}
+		return p;
+	}
 }

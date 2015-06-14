@@ -22,16 +22,21 @@
             android:id="@+id/textViewHeaderProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Illuminati Twitter Client"
+            android:text="Illuminati Twitter Confirmed"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#ffffff"
-            android:textSize="28dp" />
+            android:textSize="22sp" />
     </LinearLayout>
 
     <View
         android:id="@+id/view1"
         android:layout_width="wrap_content"
         android:layout_height="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -73,10 +78,148 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/imageViewProfilePicProfile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_launcher" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textViewHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Followers:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/textViewFollowers"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="666"
+                android:textColor="#ffffff"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view4"
+            android:layout_width="30dp"
+            android:layout_height="21dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Following:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/textViewFollowing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12"
+                android:textColor="#ffffff"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view5"
+            android:layout_width="30dp"
+            android:layout_height="21dp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tweets:"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="#ffffff" />
+
+            <TextView
+                android:id="@+id/textViewTweetsSent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5"
+                android:textColor="#ffffff"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/editTextNewTweet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Insert Tweet Message"
+        android:textColor="#ffffff"
+        android:inputType="textMultiLine"
+        android:textColorHint="#afafaf" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonPostTweet"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:background="@android:color/transparent"
+        android:textColor="#ffffff"
+        android:layout_height="wrap_content"
+        android:text="Post Tweet" />
+
     <ListView
         android:id="@+id/listViewProfileTweets"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_weight="0.1"
+        android:layout_height="0dp" >
     </ListView>
+
+    <Button
+        android:id="@+id/buttonRefresh"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textColor="#ffffff"
+        android:text="Refresh" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="wrap_content"
+        android:layout_height="110dp" />
 
 </LinearLayout>

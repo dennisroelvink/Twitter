@@ -11,6 +11,23 @@
     android:background="@drawable/illuminati"
     tools:context="nl.saxion.twitter_client.HomeActivity" >
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/textViewHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="Illuminati Twitter Confirmed"
+            android:textSize="22sp"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    </LinearLayout>
+
     <View
         android:id="@+id/view1"
         android:layout_width="wrap_content"
@@ -25,7 +42,8 @@
             android:id="@+id/buttonLogin"
             android:layout_width="110dp"
             android:background="@android:color/transparent"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
             android:layout_height="wrap_content"
             android:text="Login" />
     </LinearLayout>
@@ -39,7 +57,8 @@
             android:id="@+id/buttonGuest"
             android:layout_width="134dp"
             android:background="@android:color/transparent"
-            android:textColor="#000000"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
             android:layout_height="wrap_content"
             android:text="Guest mode" />
 

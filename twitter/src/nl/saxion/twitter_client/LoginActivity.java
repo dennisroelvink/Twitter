@@ -24,6 +24,11 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.Toast;
 
+/**
+ * Login activity that handles connecting to Twitter
+ * @author Sharon and Dennis
+ *
+ */
 public class LoginActivity extends Activity implements Observer {
 
 	private WebView webview;
@@ -65,7 +70,7 @@ public class LoginActivity extends Activity implements Observer {
 					Intent i = new Intent(LoginActivity.this,ProfileActivity.class);
 					ConnectionHandler verify = model.getcHandler();
 					verify.getConnectionInit(uri.getQueryParameter("oauth_verifier"),model.getMainActivity());
-					//i.putExtra("verifier", uri.getQueryParameter("oauth_verifier"));
+					
 					startActivity(i);
 					return true;
 				} else {
