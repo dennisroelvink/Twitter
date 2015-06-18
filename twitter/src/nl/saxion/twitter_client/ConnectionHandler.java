@@ -22,6 +22,8 @@ import nl.saxion.twitter_client.model.TweetApplication;
 import nl.saxion.twitter_client.objects.Tweet;
 import nl.saxion.twitter_client.objects.User;
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.util.Log;
 import oauth.signpost.OAuthConsumer;
@@ -56,7 +58,8 @@ public class ConnectionHandler extends Observable {
 	private String url;
 	private String verifyCode;
 
-	public ConnectionHandler() {
+	public ConnectionHandler(Model model) {
+		this.model = model;
 		consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
 		provider = new CommonsHttpOAuthProvider(REQUEST_TOKEN_URL,
 				ACCESSTOKEN_URL, AUTHORIZE_URL);
@@ -157,6 +160,8 @@ public class ConnectionHandler extends Observable {
 				loggedIn = true;
 				Log.d("TOKEN2", verifyCode);
 				Log.d("TOKEN3", consumer.getToken());
+				Log.d("TOKEN4", consumer.getToken());
+
 			} catch (OAuthMessageSignerException e) {
 				Log.d("Retrieve Error", "OAuthMessageSignerException");
 			} catch (OAuthNotAuthorizedException e) {
@@ -168,7 +173,11 @@ public class ConnectionHandler extends Observable {
 			}
 			return null;
 		}
-
+		@Override
+		protected void onPostExecute(Void result) {
+			model.setToken(consumer.getToken());
+			model.setSecret(consumer.getTokenSecret());
+		}
 	}
 
 	/**

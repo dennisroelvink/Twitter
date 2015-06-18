@@ -217,6 +217,24 @@
         android:textColor="#ffffff"
         android:text="Refresh" />
 
+    <Button
+        android:id="@+id/buttonTimeline"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textColor="#ffffff"
+        android:text="Timeline" />
+
+    <Button
+        android:id="@+id/buttonFavorite"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:textColor="#ffffff"
+        android:text="Favorite" />
+
     <View
         android:id="@+id/view2"
         android:layout_width="wrap_content"

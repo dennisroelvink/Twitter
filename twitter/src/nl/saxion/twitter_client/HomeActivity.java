@@ -28,9 +28,11 @@ public class HomeActivity extends ActionBarActivity {
 		setContentView(R.layout.activity_home);
 		TweetApplication app = (TweetApplication) getApplication();
 		model = app.getModel();
+		model.setMainActivity(this);
 		OAuthConsumer consumer = model.getcHandler().getConsumer();
 		login = (Button) findViewById(R.id.buttonLogin);
 		guest = (Button) findViewById(R.id.buttonGuest);
+		
 		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
 		String token = prefs.getString("token", "");
 		String secret = prefs.getString("tokenSecret", "");

@@ -74,6 +74,8 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 	private Button postTweet;
 	private EditText tweetText;
 	private Button refresh;
+	private Button favorite;
+	private Button timeline;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 		postTweet = (Button) findViewById(R.id.buttonPostTweet);
 		tweetText = (EditText) findViewById(R.id.editTextNewTweet);
 		refresh = (Button) findViewById(R.id.buttonRefresh);
+		timeline = (Button) findViewById(R.id.buttonTimeline);
+		favorite = (Button) findViewById(R.id.buttonFavorite);
 		
 		
 		TweetApplication app = (TweetApplication) getApplicationContext();
@@ -100,13 +104,7 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 		model.addObserver(adapter);
 		model.addObserver(this);
 		
-		OAuthConsumer c = model.getcHandler().getConsumer();
-		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
-		Editor editor = prefs.edit();
-		editor.putString("token", c.getToken());
-		Log.d("Cindy2",c.getToken());
-		editor.putString("tokenSecret", c.getTokenSecret());
-		editor.commit();
+
 		
 		verify = model.getcHandler();
 		model.getcHandler().addObserver(this);
@@ -147,6 +145,50 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 					Toast.makeText(getApplicationContext(), "Invalid tweet input", Toast.LENGTH_SHORT).show();
 				}
 				
+				
+			}
+		});
+		
+		timeline.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				model.deleteTimeLine();
+				HttpGet httpGetTimeline = new HttpGet("https://api.twitter.com/1.1/statuses/home_timeline.json");
+				try {
+					verify.signWithUserTokenTimeline(httpGetTimeline);
+				} catch (OAuthMessageSignerException e) {
+					Log.d("Error"," Message Signer Profile Activity");
+					e.printStackTrace();
+				} catch (OAuthExpectationFailedException e) {
+					Log.d("Error"," Expectation Failed Profile Activity");
+					e.printStackTrace();
+				} catch (OAuthCommunicationException e) {
+					Log.d("Error"," Communication Exception Profile Activity");
+					e.printStackTrace();
+				}
+				
+			}
+		});
+		
+		favorite.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				model.deleteTimeLine();
+				HttpGet httpGetFavorites = new HttpGet("https://api.twitter.com/1.1/favorites/list.json");
+				try { 	
+					verify.signWithUserTokenTimeline(httpGetFavorites);
+				} catch (OAuthMessageSignerException e) {
+					Log.d("Error"," Message Signer Profile Activity");
+					e.printStackTrace();
+				} catch (OAuthExpectationFailedException e) {
+					Log.d("Error"," Expectation Failed Profile Activity");
+					e.printStackTrace();
+				} catch (OAuthCommunicationException e) {
+					Log.d("Error"," Communication Exception Profile Activity");
+					e.printStackTrace();
+				}
 				
 			}
 		});
@@ -195,6 +237,13 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 			return true;
 		} else if (id == R.id.action_logout) {
 			model.getcHandler().getConsumer().setTokenWithSecret(null, null);
+			SharedPreferences prefs = getSharedPreferences(PREFS, 0);
+			Editor editor = prefs.edit();
+			//Log.d("Ted",""+model.getToken());
+			editor.putString("token", "");
+			//Log.d("Cindy2",""+model.getToken());
+			editor.putString("tokenSecret", "");
+			editor.commit();
 			model.setGoBackToMain(true);
 			model.deleteTimeLine();
 			finish();
@@ -204,14 +253,29 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 	@Override
 	public void onBackPressed() {
 		model.getcHandler().getConsumer().setTokenWithSecret(null, null);
+		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
+		Editor editor = prefs.edit();
+		//Log.d("Ted",""+model.getToken());
+		editor.putString("token", "");
+		//Log.d("Cindy2",""+model.getToken());
+		editor.putString("tokenSecret", "");
+		editor.commit();
 		model.setGoBackToMain(true);
 		model.deleteTimeLine();
+		
 		finish();
 		super.onBackPressed();
 	}
 
 	@Override
 	public void update(Observable observable, Object data) {
+		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
+		Editor editor = prefs.edit();
+		Log.d("Ted",""+model.getToken());
+		editor.putString("token", ""+model.getToken());
+		Log.d("Cindy2",""+model.getToken());
+		editor.putString("tokenSecret", ""+model.getSecret());
+		editor.commit();
 		if(model.getAccount().getName().length() == 0) {
 			Toast.makeText(getApplicationContext(), "There was an Error", Toast.LENGTH_SHORT).show();
 			model.getcHandler().getConsumer().setTokenWithSecret(null, null);

@@ -25,6 +25,8 @@ public class Model extends Observable implements Observer {
 	private Activity mainActivity;
 	private boolean isFinishedMakingUser = false;
 	private boolean goBackToMain = false;
+	private String token;
+	private String secret;
 
 
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
@@ -32,7 +34,7 @@ public class Model extends Observable implements Observer {
 	
 	
 	public Model() {
-		setcHandler(new ConnectionHandler());
+		setcHandler(new ConnectionHandler(this));
 	}
 	
 	/**
@@ -70,6 +72,8 @@ public class Model extends Observable implements Observer {
 	 */
 	public void deleteTimeLine() {
 		timelineList.clear();
+		setChanged();
+		notifyObservers();
 	}
 	
 	/**
@@ -179,6 +183,34 @@ public class Model extends Observable implements Observer {
 	public List<Tweet> getTimeLine() {
 		return timelineList;
 
+	}
+
+	/**
+	 * @return the token
+	 */
+	public String getToken() {
+		return token;
+	}
+
+	/**
+	 * @param token the token to set
+	 */
+	public void setToken(String token) {
+		this.token = token;
+	}
+
+	/**
+	 * @return the secret
+	 */
+	public String getSecret() {
+		return secret;
+	}
+
+	/**
+	 * @param secret the secret to set
+	 */
+	public void setSecret(String secret) {
+		this.secret = secret;
 	}
 
 }
