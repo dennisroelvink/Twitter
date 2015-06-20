@@ -1,0 +1,65 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/illuminati"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="nl.saxion.twitter_client.UserlistActivity" >
+
+    <TextView
+        android:id="@+id/textViewHeaderUserList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Illuminati Twitter Confirmed"
+        android:textColor="#ffffff"
+        android:textSize="22dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <View
+        android:id="@+id/view3"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp" />
+        
+    <ListView
+        android:id="@+id/listViewUserlist"
+        android:layout_width="match_parent"
+        android:layout_weight="0.1"
+        android:layout_height="0dp" >
+    </ListView>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/buttonFriendsUserlist"
+            android:layout_width="wrap_content"
+            android:textColor="#ffffff"
+            android:background="@android:color/transparent"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:text="Following" />
+
+        <Button
+            android:id="@+id/buttonFollowersUserlist"
+            android:layout_width="wrap_content"
+            android:textColor="#ffffff"
+            android:background="@android:color/transparent"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:text="Followers" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="wrap_content"
+        android:layout_height="110dp" />
+
+</LinearLayout>

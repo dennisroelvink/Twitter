@@ -6,6 +6,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Observable;
 
+import nl.saxion.twitter_client.model.Model;
+import android.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -33,6 +35,8 @@ public class User extends Observable{
 	 * @param photo profile picture of the twitteruser
 	 */
 	public User (String userName, String name, String photo) {
+		
+		
 		this.name = name;
 		this.userName = userName;
 		this.setProfilePhotoUrl(photo);

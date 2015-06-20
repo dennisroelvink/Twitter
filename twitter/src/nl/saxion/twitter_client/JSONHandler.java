@@ -22,14 +22,13 @@ import android.util.Log;
  *
  */
 public class JSONHandler {
-	private Activity mainActivity;
+	private Activity modelActivity;
 	private Model model;
 
 	public JSONHandler(Activity activity) {
-		mainActivity = activity;
+		modelActivity = activity;
 
-		TweetApplication app = (TweetApplication) mainActivity
-				.getApplicationContext();
+		TweetApplication app = (TweetApplication) modelActivity.getApplicationContext();
 		model = app.getModel();
 	}
 
@@ -66,7 +65,7 @@ public class JSONHandler {
 				ArrayList<UserMention> usermentionList = getUserMentionList(user_mentions);
 				String tweetText = getTweetText(tweet);
 				User un = new User(user.getString("screen_name"),user.getString("name"),user.getString("profile_image_url"));
-				Tweet tweetmsg = new Tweet(tweetText, un, hashtagList, urlList, usermentionList, p);
+				Tweet tweetmsg = new Tweet(tweet.getString("id_str"),tweetText, un, hashtagList, urlList, usermentionList, p);
 				un.addObserver(tweetmsg);
 				model.addTweet(tweetmsg);
 				
@@ -118,6 +117,24 @@ public class JSONHandler {
 		}
 		return user;
 	}
+
+	public void JSONToUserList(String JSONText) {
+		try{
+			JSONObject obj = getObject(JSONText);
+			JSONArray users = obj.getJSONArray("users");
+			for(int i = 0 ; i < users.length() ; i++) {
+				JSONObject user = users.getJSONObject(i);
+				
+				User userObject = new User(user.getString("screen_name"), user.getString("name"), user.getString("profile_image_url"));
+				model.addUser(userObject);
+				Log.d("Json User","Gelukt");
+			}
+		} catch(JSONException e) {
+			Log.d("1","1");
+		}
+		
+		
+	}
 	/**
 	 * Reading json for the profile timeline
 	 * @param JSONText
@@ -125,7 +142,7 @@ public class JSONHandler {
 	public void JSONToTimeLine(String JSONText) {
 		
 		try {
-			JSONArray tweets = getTweets(JSONText);
+			JSONArray tweets = getArrayFromJSONText(JSONText);
 			for (int i = 0; i < tweets.length(); i++) {
 				JSONObject tweet = tweets.getJSONObject(i);
 				JSONObject user = getUserObject(tweet);
@@ -148,7 +165,10 @@ public class JSONHandler {
 				Log.d("Dimitri", getTweetText(tweet));
 				
 				User un = new User(user.getString("screen_name"), user.getString("name"),user.getString("profile_image_url"));
-				Tweet t = new Tweet(tweet.getString("text"), un, hashtagList, urlList, usermentionList, p);
+				Tweet t = new Tweet(tweet.getString("id_str"),tweet.getString("text"), un, hashtagList, urlList, usermentionList, p);
+				if(tweet.getBoolean("favorited") == true) {
+					t.setFav(true);
+				}
 				un.addObserver(t);
 				model.addTimelineTweet(t);
 				
@@ -218,7 +238,7 @@ public class JSONHandler {
 	 * @param JSONText jsontext
 	 * @return tweets
 	 */
-	private JSONArray getTweets(String JSONText) {
+	private JSONArray getArrayFromJSONText(String JSONText) {
 
 		JSONArray obj = null;
 		try {
@@ -365,4 +385,5 @@ public class JSONHandler {
 		}
 		return p;
 	}
+
 }

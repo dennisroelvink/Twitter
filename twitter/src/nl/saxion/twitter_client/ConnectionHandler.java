@@ -50,6 +50,7 @@ public class ConnectionHandler extends Observable {
 	private String responseString = "";
 	private HttpRequestBase requestBaseTimeline ;
 	private HttpRequestBase requestBasePostTweet;
+	private HttpRequestBase requestBaseUserList;
 	private OAuthProvider provider;
 	private OAuthConsumer consumer;
 	private boolean loggedIn = false;
@@ -215,12 +216,62 @@ public class ConnectionHandler extends Observable {
 	 * @throws OAuthExpectationFailedException
 	 * @throws OAuthCommunicationException
 	 */
-	public void signWithUserTokenNewTweet(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
+	public void signWithUserTokenPostRequest(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
 		assert loggedIn : "User not logged in";
 		requestBasePostTweet = request;
-		new PostTweet().execute();
+		new PostRequestHandler().execute();
 		
 	}
+	public void signWithUserTokenUserList(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
+		assert loggedIn : "User not logged in";
+		requestBaseUserList = request;
+		new GetUserList().execute();
+	}
+	
+	public class GetUserList extends AsyncTask<Void,Void,Void> {
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				consumer.sign(requestBaseUserList);
+			} catch (OAuthMessageSignerException e1) {
+				Log.d("SResponse","OAuthMessagerSigner");
+				e1.printStackTrace();
+			} catch (OAuthExpectationFailedException e1) {
+				Log.d("SResponse","OAuthExpectationFailed");
+				e1.printStackTrace();
+			} catch (OAuthCommunicationException e1) {
+				Log.d("SResponse","OAuthCommunication error");
+				e1.printStackTrace();
+			}
+			HttpClient client = new DefaultHttpClient();
+			try {
+			
+				
+				ResponseHandler<String> responseHandler = new BasicResponseHandler();
+	            responseString = client.execute(requestBaseUserList, responseHandler);
+	            
+	            //Log.d("CResponse",responseString);
+			} catch (ClientProtocolException e) {
+				Log.d("CResponse","Client protocol Exception");
+				e.printStackTrace();
+			} catch (IOException e) {
+				Log.d("CResponse","IO Exception");
+				e.printStackTrace();
+			}
+			return null;
+		}
+		@Override
+		protected void onPostExecute(Void result) {
+			Log.d("Onpost",""+responseString);
+			JSONHandler handler = new JSONHandler(model.getMainActivity());
+			handler.JSONToUserList(responseString);
+			setChanged();
+			notifyObservers();
+		}
+		
+	}
+	
 	/**
 	 * Updates the model with user credentials
 	 * @author Sharon and Dennis
@@ -327,7 +378,7 @@ public class ConnectionHandler extends Observable {
 	 * @author Sharon and Dennis
 	 *
 	 */
-	public class PostTweet extends AsyncTask<Void,Void,Void> {
+	public class PostRequestHandler extends AsyncTask<Void,Void,Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -362,7 +413,7 @@ public class ConnectionHandler extends Observable {
 		}
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.d("Posted Tweet",""+responseString);
+			Log.d("Jobs done",""+responseString);
 			
 			
 		}

@@ -179,6 +179,11 @@
 
     </LinearLayout>
 
+    <View
+        android:id="@+id/view3"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp" />
+
     <EditText
         android:id="@+id/editTextNewTweet"
         android:layout_width="match_parent"
@@ -201,43 +206,50 @@
         android:layout_height="wrap_content"
         android:text="Post Tweet" />
 
-    <ListView
-        android:id="@+id/listViewProfileTweets"
-        android:layout_width="match_parent"
-        android:layout_weight="0.1"
-        android:layout_height="0dp" >
-    </ListView>
+    <View
+        android:id="@+id/view6"
+        android:layout_width="wrap_content"
+        android:layout_height="75dp" />
 
-    <Button
-        android:id="@+id/buttonRefresh"
-        style="?android:attr/buttonStyleSmall"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:textColor="#ffffff"
-        android:text="Refresh" />
+        android:layout_gravity="center"
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/buttonTimeline"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:textColor="#ffffff"
-        android:text="Timeline" />
+        <Button
+            android:id="@+id/buttonTimeline"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_weight="1.0"
+            android:text="Timeline"
+            android:textColor="#ffffff" />
 
-    <Button
-        android:id="@+id/buttonFavorite"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:textColor="#ffffff"
-        android:text="Favorite" />
+        <Button
+            android:id="@+id/buttonShowFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.0"
+            android:background="@android:color/transparent"
+            android:text="Friends/Followers"
+            android:textColor="#ffffff" />
+
+        <Button
+            android:id="@+id/buttonFavorite"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_weight="1.0"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:text="Favorite"
+            android:textColor="#ffffff" />
+
+    </LinearLayout>
 
     <View
         android:id="@+id/view2"
         android:layout_width="wrap_content"
-        android:layout_height="110dp" />
+        android:layout_height="60dp" />
 
 </LinearLayout>

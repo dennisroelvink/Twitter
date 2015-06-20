@@ -31,12 +31,38 @@ public class Model extends Observable implements Observer {
 
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
 	private ArrayList<Tweet> timelineList = new ArrayList<Tweet>();
-	
+	private ArrayList<User> userList = new ArrayList<User>();
 	
 	public Model() {
 		setcHandler(new ConnectionHandler(this));
 	}
 	
+	/**
+	 * Adds user to userlist
+	 * @param user
+	 */
+	public void addUser(User user) {
+		user.addObserver(this);
+		userList.add(user);
+		setChanged();
+		notifyObservers();
+	}
+
+	/**
+	 * Clears userlist
+	 */
+	public void clearUserList(){
+		userList.clear();
+		setChanged();
+		notifyObservers();
+	}
+	/**
+	 * Returns userlist
+	 * @return
+	 */
+	public List<User> getUserList() {
+		return userList;
+	}
 	/**
 	 * Adds a tweet to the arraylist tweetList
 	 * @param tweet
@@ -82,6 +108,9 @@ public class Model extends Observable implements Observer {
 	 */
 	public ArrayList<Tweet> getTweetList(){
 		return tweetList;
+	}
+	public Tweet getTweetAtPos(int pos) {
+		return timelineList.get(pos);
 	}
 
 	@Override

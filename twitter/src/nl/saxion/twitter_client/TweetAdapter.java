@@ -4,6 +4,7 @@ package nl.saxion.twitter_client;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
+
 import nl.saxion.twitter_client.model.Model;
 import nl.saxion.twitter_client.model.TweetApplication;
 import nl.saxion.twitter_client.objects.Hashtag;
@@ -19,6 +20,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.URLSpan;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -57,6 +59,7 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		TextView name = (TextView) convertView.findViewById(R.id.textViewName);
 		ImageView profilePhoto = (ImageView) convertView.findViewById(R.id.imageViewProfilePhoto);
 		ImageView photo = (ImageView) convertView.findViewById(R.id.imageViewPhoto);
+		ImageView favorite= (ImageView) convertView.findViewById(R.id.imageViewFavorite);
 		
 		// makes the hashtag text blue
 		SpannableString spannableTweet = new SpannableString(tweet.getText());
@@ -90,6 +93,10 @@ public class TweetAdapter extends ArrayAdapter<Tweet> implements Observer{
 		profilePhoto.setImageBitmap(tweet.getUser().getBitmap());
 		photo.setImageBitmap(tweet.getPhoto().getBitmap());
 
+		if(tweet.isFav()){
+			favorite.setImageResource(R.drawable.favorite);
+		}
+		
 		return convertView;
 		
 	}

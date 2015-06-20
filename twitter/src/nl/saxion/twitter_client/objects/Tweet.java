@@ -19,16 +19,30 @@ public class Tweet extends Observable implements Observer {
 	private String text;
 	private long tweetID;
 	private User user;
+	private String id;
+	private boolean isFav = false;
 	
-	public Tweet(String text, User user, ArrayList<Hashtag> list, ArrayList<Url> urlList, ArrayList<UserMention> mentionList,Photo p) {
+	/**
+	 * Constructor tweet
+	 * @param id id
+	 * @param text text
+	 * @param user user
+	 * @param list list hashtags
+	 * @param urlList list urls
+	 * @param mentionList list user mentions
+	 * @param p photo
+	 */
+	public Tweet(String id,String text, User user, ArrayList<Hashtag> list, ArrayList<Url> urlList, ArrayList<UserMention> mentionList,Photo p) {
 		this.text = text;
 		this.user = user;
 		hashtagList = list;
 		this.urlList = urlList; 
+		this.setId(id);
 		this.mentionList = mentionList;
 		this.photo = p;
 		
 	}
+	
 	public int getMentionListSize() {
 		return mentionList.size();
 	}
@@ -114,6 +128,36 @@ public class Tweet extends Observable implements Observer {
 		setChanged();
 		notifyObservers();
 		
+	}
+
+	/**
+	 * @return the id
+	 */
+	public String getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the isFav
+	 */
+	public boolean isFav() {
+		return isFav;
+	}
+
+	/**
+	 * @param isFav the isFav to set
+	 */
+	public void setFav(boolean isFav) {
+		this.isFav = isFav;
+		setChanged();
+		notifyObservers();
 	}
 
 
