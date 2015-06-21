@@ -27,8 +27,6 @@ public class Model extends Observable implements Observer {
 	private boolean goBackToMain = false;
 	private String token;
 	private String secret;
-
-
 	private ArrayList<Tweet> tweetList = new ArrayList<Tweet>();
 	private ArrayList<Tweet> timelineList = new ArrayList<Tweet>();
 	private ArrayList<User> userList = new ArrayList<User>();
@@ -56,6 +54,7 @@ public class Model extends Observable implements Observer {
 		setChanged();
 		notifyObservers();
 	}
+	
 	/**
 	 * Returns userlist
 	 * @return
@@ -63,6 +62,7 @@ public class Model extends Observable implements Observer {
 	public List<User> getUserList() {
 		return userList;
 	}
+	
 	/**
 	 * Adds a tweet to the arraylist tweetList
 	 * @param tweet
@@ -109,6 +109,12 @@ public class Model extends Observable implements Observer {
 	public ArrayList<Tweet> getTweetList(){
 		return tweetList;
 	}
+	
+	/**
+	 * Returns tweet at given position
+	 * @param pos position
+	 * @return tweet object
+	 */
 	public Tweet getTweetAtPos(int pos) {
 		return timelineList.get(pos);
 	}

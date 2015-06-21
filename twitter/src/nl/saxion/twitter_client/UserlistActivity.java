@@ -21,7 +21,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class UserlistActivity extends Activity implements Observer{
+/**
+ * The userlist activity
+ * @author Sharon and Dennis
+ *
+ */
+public class UserlistActivity extends Activity{
 
 	private ListView userlist;
 	private Model model;
@@ -37,16 +42,18 @@ public class UserlistActivity extends Activity implements Observer{
 		handler = new JSONHandler(this);
 		TweetApplication app = (TweetApplication) getApplicationContext();
 		model = app.getModel();
+		
 		userlist = (ListView) findViewById(R.id.listViewUserlist);
 		friends = (Button) findViewById(R.id.buttonFriendsUserlist);
 		followers = (Button) findViewById(R.id.buttonFollowersUserlist);
+		
 		verify = model.getcHandler();
 		UserAdapter adapter = new UserAdapter(this, R.layout.user, model.getUserList());
 		
 		userlist.setAdapter(adapter);
 		model.addObserver(adapter);
-		model.getcHandler().addObserver(this);
 		
+		// Sends get request for the people the user is following
 		friends.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -69,6 +76,7 @@ public class UserlistActivity extends Activity implements Observer{
 			}
 		});
 		
+		// Sends get request for the users followers
 		followers.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -110,11 +118,5 @@ public class UserlistActivity extends Activity implements Observer{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void update(Observable observable, Object data) {
-		// TODO Auto-generated method stub
-		
 	}
 }

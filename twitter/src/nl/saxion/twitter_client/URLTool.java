@@ -18,14 +18,17 @@ import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
 
+/**
+ * The UrlTool class
+ * @author Sharon and Dennis
+ *
+ */
 public class URLTool {
 
 	private static final String API_KEY = "qmQ1kDhXeaBFIp5Hran1XZZ9M";
 	private static final String API_SECRET = "r9YIzFiKAruyes2xNAFBSiDPgkA3TlcNqYDBUblcuUvlbtB0Y6";
 	private String authString = API_KEY + ":" + API_SECRET;
-	private String base64 = Base64.encodeToString(authString.getBytes(),
-			Base64.NO_WRAP);
-
+	private String base64 = Base64.encodeToString(authString.getBytes(),Base64.NO_WRAP);
 	private String JSONText;
 	private JSONHandler handler;
 	private String url;
@@ -36,7 +39,10 @@ public class URLTool {
 		handler = new JSONHandler(activity);
 	}
 
-	public void ExecuteHandler() {
+	/**
+	 * Executes the urlHandler class
+	 */
+	public void executeHandler() {
 		new URLHandler().execute();
 	}
 
@@ -172,7 +178,7 @@ public class URLTool {
 		 */
 		@Override
 		protected void onPostExecute(Void result) {
-			handler.JSONToTweet(getJSONText());
+			handler.jsonToTweet(getJSONText());
 			super.onPostExecute(result);
 			setSearching(true);
 		}

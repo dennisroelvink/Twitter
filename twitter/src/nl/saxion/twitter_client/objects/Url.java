@@ -14,6 +14,12 @@ public class Url {
 	
 	private ArrayList<Integer> indices = new ArrayList<Integer>();
 	
+	/**
+	 * Constructor url
+	 * @param url url string
+	 * @param beginUrl beginning of the url
+	 * @param endUrl end of the url
+	 */
 	public Url(String url, int beginUrl, int endUrl){
 		this.url = url;
 		this.setBeginUrl(beginUrl);

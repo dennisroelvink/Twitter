@@ -338,7 +338,8 @@ int drawable backg 0x7f020033
 int drawable favorite 0x7f020034
 int drawable ic_launcher 0x7f020035
 int drawable illuminati 0x7f020036
-int drawable star_none 0x7f020037
+int drawable logo 0x7f020037
+int drawable star_none 0x7f020038
 int id LinearLayout1 0x7f0a0044
 int id LinearLayout2 0x7f0a003f
 int id action_bar 0x7f0a0031

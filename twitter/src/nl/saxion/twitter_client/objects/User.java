@@ -11,6 +11,7 @@ import android.R;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
+import android.util.Log;
 
 /**
  * The User class
@@ -35,7 +36,6 @@ public class User extends Observable{
 	 * @param photo profile picture of the twitteruser
 	 */
 	public User (String userName, String name, String photo) {
-		
 		
 		this.name = name;
 		this.userName = userName;
@@ -172,12 +172,13 @@ public class User extends Observable{
 			} catch (MalformedURLException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				Log.d("Bitmap error", "IOException");
 				e.printStackTrace();
 			}
 			
 			return null;
 		}
+		
 		@Override
 		protected void onPostExecute(Void result) {
 			setBitmap(bitmap);

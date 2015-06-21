@@ -15,6 +15,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+/**
+ * The HomeActivity
+ * @author Sharon and Dennis
+ *
+ */
 public class HomeActivity extends ActionBarActivity {
 
 	private Button login;
@@ -46,7 +51,7 @@ public class HomeActivity extends ActionBarActivity {
 			Intent i = new Intent(HomeActivity.this,ProfileActivity.class);
 			startActivity(i);
 		}
-		
+		// Starts LoginActivity
 		login.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -56,12 +61,12 @@ public class HomeActivity extends ActionBarActivity {
 				
 			}
 		});
-		
+		// starts SearchActivity
 		guest.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				Intent i = new Intent(HomeActivity.this, MainActivity.class);
+				Intent i = new Intent(HomeActivity.this, SearchActivity.class);
 				startActivity(i);
 				
 			}

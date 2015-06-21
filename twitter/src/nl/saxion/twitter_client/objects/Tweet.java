@@ -43,25 +43,57 @@ public class Tweet extends Observable implements Observer {
 		
 	}
 	
+	/**
+	 * Returns size of user mentionlist
+	 * @return
+	 */
 	public int getMentionListSize() {
 		return mentionList.size();
 	}
+	
+	/**
+	 * Returns user mention at given position
+	 * @param pos position
+	 * @return user mention object
+	 */
 	public UserMention getMentionAtPosition(int pos) {
 		return mentionList.get(pos);
 	}
+	
+	/**
+	 * Returns url list size
+	 * @return size url list
+	 */
 	public int getUrlListSize() {
 		return urlList.size();
 	}
+	
+	/**
+	 * Returns url at given position
+	 * @param pos position
+	 * @return url object
+	 */
 	public Url getUrlAtPosition(int pos) {
 		return urlList.get(pos);
 	}
 
+	/**
+	 * Returns hashtag list size 
+	 * @return size hashtag list
+	 */
 	public int getHashtagListSize() {
 		return hashtagList.size();
 	}
+	
+	/**
+	 * Returns hashtag at given position
+	 * @param pos position
+	 * @return hashtag object
+	 */
 	public Hashtag getHashtagAtPosition(int pos) {
 		return hashtagList.get(pos);
 	}
+	
 	/**
 	 * @return the text
 	 */
@@ -115,6 +147,7 @@ public class Tweet extends Observable implements Observer {
 	public Photo getPhoto() {
 		return photo;
 	}
+	
 	/**
 	 * @param photo the photo to set
 	 */
@@ -123,6 +156,7 @@ public class Tweet extends Observable implements Observer {
 		setChanged();
 		notifyObservers();
 	}
+	
 	@Override
 	public void update(Observable observable, Object data) {
 		setChanged();

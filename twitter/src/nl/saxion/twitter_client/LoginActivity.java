@@ -104,6 +104,7 @@ public class LoginActivity extends Activity implements Observer {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
 	@Override
 	public void update(Observable observable, Object data) {
 		webview.loadUrl(model.getAuthoriseURL());

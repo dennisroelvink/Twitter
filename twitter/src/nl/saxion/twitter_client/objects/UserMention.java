@@ -10,6 +10,12 @@ public class UserMention {
 	private int beginMention;
 	private int endMention;
 	
+	/**
+	 * The constructor of the usermention class
+	 * @param screenName screenName text
+	 * @param beginMention beginning of the usermention
+	 * @param endMention end of the usermention
+	 */
 	public UserMention(String screenName, int beginMention,int endMention){
 		this.screenName = screenName;
 		this.beginMention = beginMention;

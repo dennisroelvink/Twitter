@@ -25,7 +25,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-public class TweetListActivity extends Activity implements Observer {
+/**
+ * The tweetList activity
+ * @author Sharon and Dennis
+ *
+ */
+public class TweetListActivity extends Activity {
 
 	private ConnectionHandler verify;
 	private Model model;
@@ -46,20 +51,20 @@ public class TweetListActivity extends Activity implements Observer {
 		Intent i = getIntent();
 		int choice = i.getIntExtra("choice", -1);
 		adapter = new TweetAdapter(this, R.layout.tweet,model.getTimeLine());
-		model.addObserver(this);
-
+		
 		verify = model.getcHandler();
-		model.getcHandler().addObserver(this);
 		handler = new JSONHandler(this);
 		tweetlist.setAdapter(adapter);
 		model.addObserver(adapter);
 
+		// If choice equals 0, tweetlistactivity will show the timeline. 
+		// If choice equals 1, tweetlistactivity will show the favorites.
 		if (choice == 0) {
 			model.deleteTimeLine();
 			HttpGet httpGetTimeline = new HttpGet(
 					"https://api.twitter.com/1.1/statuses/home_timeline.json");
 			try {
-				verify.signWithUserTokenTimeline(httpGetTimeline);
+				verify.signWithUserTokenGetTweetList(httpGetTimeline);
 			} catch (OAuthMessageSignerException e) {
 				Log.d("Error", " Message Signer Profile Activity");
 				e.printStackTrace();
@@ -75,7 +80,7 @@ public class TweetListActivity extends Activity implements Observer {
 			HttpGet httpGetFavorites = new HttpGet(
 					"https://api.twitter.com/1.1/favorites/list.json");
 			try {
-				verify.signWithUserTokenTimeline(httpGetFavorites);
+				verify.signWithUserTokenGetTweetList(httpGetFavorites);
 			} catch (OAuthMessageSignerException e) {
 				Log.d("Error", " Message Signer Profile Activity");
 				e.printStackTrace();
@@ -87,6 +92,10 @@ public class TweetListActivity extends Activity implements Observer {
 				e.printStackTrace();
 			}
 		}
+		
+		/**
+		 * When clicking on the tweet, the tweet will be set as favorite or as non-favorite
+		 */
 		tweetlist.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -149,11 +158,5 @@ public class TweetListActivity extends Activity implements Observer {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void update(Observable observable, Object data) {
-		// TODO Auto-generated method stub
-		
 	}
 }

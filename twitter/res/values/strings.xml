@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Twitter-Client</string>
+    <string name="app_name">Illuminati Twitter Confirmed</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_music">Toggle music</string>
@@ -9,10 +9,10 @@
 
     <color name="white">#FFFFFF</color>
 
-    <string name="title_activity_login">LoginActivity</string>
-    <string name="title_activity_profile">ProfileActivity</string>
-    <string name="title_activity_home">HomeActivity</string>
-    <string name="title_activity_userlist">UserlistActivity</string>
-    <string name="title_activity_timeline">TimelineActivity</string>
+    <string name="title_activity_login">Illuminati Twitter Confirmed</string>
+    <string name="title_activity_profile">Illuminati Twitter Confirmed</string>
+    <string name="title_activity_home">Illuminati Twitter Confirmed</string>
+    <string name="title_activity_userlist">Illuminati Twitter Confirmed</string>
+    <string name="title_activity_timeline">Illuminati Twitter Confirmed</string>
 
 </resources>

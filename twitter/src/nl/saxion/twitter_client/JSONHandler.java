@@ -38,7 +38,7 @@ public class JSONHandler {
 	 * 
 	 * @param filename
 	 */
-	public void JSONToTweet(String test) {
+	public void jsonToTweet(String test) {
 		JSONObject obj = getObject(test);
 		JSONArray tweets = getArray(obj, "statuses");
 		for(int i = 0; i < tweets.length();i++) {
@@ -63,6 +63,7 @@ public class JSONHandler {
 				ArrayList<Hashtag> hashtagList = getHashtagList(hashtags);
 				ArrayList<Url> urlList = getUrlList(urls);
 				ArrayList<UserMention> usermentionList = getUserMentionList(user_mentions);
+				
 				String tweetText = getTweetText(tweet);
 				User un = new User(user.getString("screen_name"),user.getString("name"),user.getString("profile_image_url"));
 				Tweet tweetmsg = new Tweet(tweet.getString("id_str"),tweetText, un, hashtagList, urlList, usermentionList, p);
@@ -118,7 +119,11 @@ public class JSONHandler {
 		return user;
 	}
 
-	public void JSONToUserList(String JSONText) {
+	/**
+	 * Adds an user object to the userlist
+	 * @param JSONText
+	 */
+	public void jsonToUserList(String JSONText) {
 		try{
 			JSONObject obj = getObject(JSONText);
 			JSONArray users = obj.getJSONArray("users");
@@ -130,16 +135,16 @@ public class JSONHandler {
 				Log.d("Json User","Gelukt");
 			}
 		} catch(JSONException e) {
-			Log.d("1","1");
+			Log.d("JSON Error","JSON Exception userList");
 		}
 		
 		
 	}
 	/**
-	 * Reading json for the profile timeline
+	 * Reading json for the profile timeline/favorites
 	 * @param JSONText
 	 */
-	public void JSONToTimeLine(String JSONText) {
+	public void jsonToTweetList(String JSONText) {
 		
 		try {
 			JSONArray tweets = getArrayFromJSONText(JSONText);

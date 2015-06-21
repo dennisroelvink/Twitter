@@ -146,6 +146,7 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 			}
 		});
 		
+		// Starts the tweetlist activity class with the timeline
 		timeline.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -157,6 +158,7 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 			}
 		});
 		
+		// Starts the tweetlist activity class with the favorites list
 		favorite.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -168,6 +170,7 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 			}
 		});
 		
+		// Starts the userlist activity class
 		showFriends.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -179,7 +182,6 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 				
 			}
 		});
-		
 		
 		try {
 			verify.signWithUserTokenCredentials(httpGetUser);
@@ -216,10 +218,10 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 				try {
 					p.prepare();
 				} catch (IllegalStateException e) {
-					// TODO Auto-generated catch block
+					Log.d("Media player error", "IllegalStateException");
 					e.printStackTrace();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
+					Log.d("Media player error", "IOException");
 					e.printStackTrace();
 				}
 			} else {
@@ -230,9 +232,7 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 			model.getcHandler().getConsumer().setTokenWithSecret(null, null);
 			SharedPreferences prefs = getSharedPreferences(PREFS, 0);
 			Editor editor = prefs.edit();
-			//Log.d("Ted",""+model.getToken());
 			editor.putString("token", "");
-			//Log.d("Cindy2",""+model.getToken());
 			editor.putString("tokenSecret", "");
 			editor.commit();
 			model.setGoBackToMain(true);
@@ -260,11 +260,10 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 	public void update(Observable observable, Object data) {
 		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
 		Editor editor = prefs.edit();
-		//Log.d("Ted",""+model.getToken());
 		editor.putString("token", ""+model.getToken());
-		//Log.d("Cindy2",""+model.getToken());
 		editor.putString("tokenSecret", ""+model.getSecret());
 		editor.commit();
+		
 		if(model.getAccount().getName().length() == 0) {
 			Toast.makeText(getApplicationContext(), "There was an Error", Toast.LENGTH_SHORT).show();
 			model.getcHandler().getConsumer().setTokenWithSecret(null, null);

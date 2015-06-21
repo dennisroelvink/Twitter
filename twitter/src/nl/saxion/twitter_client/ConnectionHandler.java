@@ -36,6 +36,11 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
 import oauth.signpost.http.HttpRequest;
 
+/**
+ * The ConnectionHandler activity
+ * @author Sharon and Dennis
+ *
+ */
 public class ConnectionHandler extends Observable {
 
 	private static final String CONSUMER_KEY = "qmQ1kDhXeaBFIp5Hran1XZZ9M";
@@ -59,6 +64,10 @@ public class ConnectionHandler extends Observable {
 	private String url;
 	private String verifyCode;
 
+	/**
+	 * Constructor connectionhandler
+	 * @param model model 
+	 */
 	public ConnectionHandler(Model model) {
 		this.model = model;
 		consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
@@ -196,21 +205,21 @@ public class ConnectionHandler extends Observable {
 	}
 	
 	/**
-	 * Signs the request and executes ReceiveTimeline
+	 * Signs the request and executes ReceiveTweetList
 	 * @param request httpRequest
 	 * @throws OAuthMessageSignerException
 	 * @throws OAuthExpectationFailedException
 	 * @throws OAuthCommunicationException
 	 */
-	public void signWithUserTokenTimeline(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
+	public void signWithUserTokenGetTweetList(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
 		assert loggedIn : "User not logged in";
 		requestBaseTimeline = request;
-		new ReceiveTimeline().execute();
+		new ReceiveTweetList().execute();
 		
 	}
 	
 	/**
-	 * Signs the request and executes PostTweet
+	 * Signs the request and executes PostRequestHandler
 	 * @param request httpRequest
 	 * @throws OAuthMessageSignerException
 	 * @throws OAuthExpectationFailedException
@@ -222,13 +231,25 @@ public class ConnectionHandler extends Observable {
 		new PostRequestHandler().execute();
 		
 	}
+	/**
+	 * Signs the request and executes GetUserList
+	 * @param request
+	 * @throws OAuthMessageSignerException
+	 * @throws OAuthExpectationFailedException
+	 * @throws OAuthCommunicationException
+	 */
 	public void signWithUserTokenUserList(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
 		assert loggedIn : "User not logged in";
 		requestBaseUserList = request;
 		new GetUserList().execute();
 	}
 	
-	public class GetUserList extends AsyncTask<Void,Void,Void> {
+	/**
+	 * Updates the model with an userlist
+	 * @author Sharon and Dennis
+	 *
+	 */
+	private class GetUserList extends AsyncTask<Void,Void,Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -247,11 +268,9 @@ public class ConnectionHandler extends Observable {
 			HttpClient client = new DefaultHttpClient();
 			try {
 			
-				
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 	            responseString = client.execute(requestBaseUserList, responseHandler);
 	            
-	            //Log.d("CResponse",responseString);
 			} catch (ClientProtocolException e) {
 				Log.d("CResponse","Client protocol Exception");
 				e.printStackTrace();
@@ -265,7 +284,7 @@ public class ConnectionHandler extends Observable {
 		protected void onPostExecute(Void result) {
 			Log.d("Onpost",""+responseString);
 			JSONHandler handler = new JSONHandler(model.getMainActivity());
-			handler.JSONToUserList(responseString);
+			handler.jsonToUserList(responseString);
 			setChanged();
 			notifyObservers();
 		}
@@ -277,7 +296,7 @@ public class ConnectionHandler extends Observable {
 	 * @author Sharon and Dennis
 	 *
 	 */
-	public class ReceiveCredentials extends AsyncTask<Void,Void,Void> {
+	private class ReceiveCredentials extends AsyncTask<Void,Void,Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -324,11 +343,11 @@ public class ConnectionHandler extends Observable {
 	}
 	
 	/**
-	 * Updates the model with the timeline
+	 * Updates the model with the tweetlist
 	 * @author Sharon and Dennis
 	 *
 	 */
-	public class ReceiveTimeline extends AsyncTask<Void,Void,Void> {
+	private class ReceiveTweetList extends AsyncTask<Void,Void,Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -365,7 +384,7 @@ public class ConnectionHandler extends Observable {
 		protected void onPostExecute(Void result) {
 			Log.d("Onpost2",""+responseString);
 			JSONHandler handler = new JSONHandler(model.getMainActivity());
-			handler.JSONToTimeLine(responseString);
+			handler.jsonToTweetList(responseString);
 			
 			setChanged();
 			notifyObservers();
@@ -378,7 +397,7 @@ public class ConnectionHandler extends Observable {
 	 * @author Sharon and Dennis
 	 *
 	 */
-	public class PostRequestHandler extends AsyncTask<Void,Void,Void> {
+	private class PostRequestHandler extends AsyncTask<Void,Void,Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -401,7 +420,6 @@ public class ConnectionHandler extends Observable {
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 	            responseString = client.execute(requestBasePostTweet, responseHandler);
 	            
-	            //Log.d("CResponse",responseString);
 			} catch (ClientProtocolException e) {
 				Log.d("CResponse","Client protocol Exception");
 				e.printStackTrace();
@@ -414,7 +432,6 @@ public class ConnectionHandler extends Observable {
 		@Override
 		protected void onPostExecute(Void result) {
 			Log.d("Jobs done",""+responseString);
-			
 			
 		}
 		

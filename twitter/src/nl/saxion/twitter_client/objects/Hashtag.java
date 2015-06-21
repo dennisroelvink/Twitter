@@ -1,12 +1,22 @@
 package nl.saxion.twitter_client.objects;
 
-
+/**
+ * The Hashtag class
+ * @author Sharon and Dennis
+ *
+ */
 public class Hashtag {
 
 	private String hashText;
 	private int beginHash;
 	private int endHash;
 	
+	/**
+	 * The hashtag constructor
+	 * @param hashText hashtag text
+	 * @param beginHash beginning of the hashtag
+	 * @param endHash end of the hashtag
+	 */
 	public Hashtag(String hashText, int beginHash, int endHash){
 		this.hashText = hashText;
 		this.beginHash = beginHash;

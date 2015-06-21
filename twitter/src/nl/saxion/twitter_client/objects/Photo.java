@@ -19,6 +19,12 @@ public class Photo {
 	private int endPhotoURL;
 	private Bitmap bitmap;
 	
+	/**
+	 * The photo constructor
+	 * @param photoURL the photo url
+	 * @param begin beginning of the photo url
+	 * @param end end of the photo url
+	 */
 	public Photo(String photoURL, int begin, int end){
 		this.setPhotoURL(photoURL);
 		this.setBeginPhotoURL(begin);

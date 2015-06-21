@@ -16,6 +16,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * The Useradapter class
+ * @author Sharon and Dennis
+ *
+ */
 public class UserAdapter extends ArrayAdapter<User> implements Observer {
 
 	private LayoutInflater inflater;
@@ -30,6 +35,9 @@ public class UserAdapter extends ArrayAdapter<User> implements Observer {
 		model.addObserver(this);
 	}
 	
+	/**
+	 * Updates the listview for every position
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		convertView = inflater.inflate(R.layout.user, parent,false);
@@ -43,10 +51,8 @@ public class UserAdapter extends ArrayAdapter<User> implements Observer {
 //			profilePic.setImageBitmap(user.getBitmap());
 //		}
 
-		
 		screenName.setText(user.getUserName());
 		realName.setText(user.getName());
-		
 		
 		return convertView;
 	}
