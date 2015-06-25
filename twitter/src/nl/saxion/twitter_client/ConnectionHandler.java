@@ -51,6 +51,8 @@ public class ConnectionHandler extends Observable {
 	private static final String AUTHORIZE_URL = "https://api.twitter.com/oauth/authorize";
 	private static final String CALLBACK_URL = "http://grotekaartenkopen.nl/";
 	
+	private static final String PREFS = "LOGINTOKEN";
+	
 	private HttpRequestBase requestBase;
 	private String responseString = "";
 	private HttpRequestBase requestBaseTimeline ;
@@ -131,7 +133,7 @@ public class ConnectionHandler extends Observable {
 		protected Void doInBackground(Void... params) {
 			try {
 				url = provider.retrieveRequestToken(consumer, CALLBACK_URL);
-				Log.d("Katy Perry2", url);
+			
 
 			} catch (OAuthMessageSignerException e) {
 				Log.d("Retrieve Error", "OAuthMessageSignerException");
@@ -161,16 +163,11 @@ public class ConnectionHandler extends Observable {
 		@Override
 		protected Void doInBackground(Void... params) {
 			try {
-				Log.d("TOKEN", verifyCode);
-				Log.d("Jim",consumer.getToken());
 				provider.retrieveAccessToken(consumer, verifyCode);
-				
-				Log.d("Jim",consumer.getToken());
-				
 				loggedIn = true;
-				Log.d("TOKEN2", verifyCode);
-				Log.d("TOKEN3", consumer.getToken());
-				Log.d("TOKEN4", consumer.getToken());
+				Log.d("Verify code", verifyCode);
+				Log.d("TOKEN consumer", consumer.getToken());
+
 
 			} catch (OAuthMessageSignerException e) {
 				Log.d("Retrieve Error", "OAuthMessageSignerException");
@@ -187,6 +184,11 @@ public class ConnectionHandler extends Observable {
 		protected void onPostExecute(Void result) {
 			model.setToken(consumer.getToken());
 			model.setSecret(consumer.getTokenSecret());
+			SharedPreferences prefs = activity.getSharedPreferences(PREFS, 0);
+			Editor editor = prefs.edit();
+			editor.putString("token", consumer.getToken());
+			editor.putString("tokenSecret", consumer.getTokenSecret());
+			editor.commit();
 		}
 	}
 
@@ -241,7 +243,7 @@ public class ConnectionHandler extends Observable {
 	public void signWithUserTokenUserList(HttpRequestBase request)throws OAuthMessageSignerException,OAuthExpectationFailedException, OAuthCommunicationException {
 		assert loggedIn : "User not logged in";
 		requestBaseUserList = request;
-		new GetUserList().execute();
+		new ReceiveUserList().execute();
 	}
 	
 	/**
@@ -249,7 +251,7 @@ public class ConnectionHandler extends Observable {
 	 * @author Sharon and Dennis
 	 *
 	 */
-	private class GetUserList extends AsyncTask<Void,Void,Void> {
+	private class ReceiveUserList extends AsyncTask<Void,Void,Void> {
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -318,8 +320,7 @@ public class ConnectionHandler extends Observable {
 				
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 	            responseString = client.execute(requestBase, responseHandler);
-	            
-	            //Log.d("CResponse",responseString);
+	           
 			} catch (ClientProtocolException e) {
 				Log.d("CResponse","Client protocol Exception");
 				e.printStackTrace();
@@ -370,7 +371,6 @@ public class ConnectionHandler extends Observable {
 				ResponseHandler<String> responseHandler = new BasicResponseHandler();
 	            responseString = client.execute(requestBaseTimeline, responseHandler);
 	            
-	            //Log.d("CResponse",responseString);
 			} catch (ClientProtocolException e) {
 				Log.d("CResponse","Client protocol Exception");
 				e.printStackTrace();
@@ -431,7 +431,7 @@ public class ConnectionHandler extends Observable {
 		}
 		@Override
 		protected void onPostExecute(Void result) {
-			Log.d("Jobs done",""+responseString);
+			Log.d("Onpost finished",""+responseString);
 			
 		}
 		

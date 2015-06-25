@@ -46,10 +46,10 @@ public class UserAdapter extends ArrayAdapter<User> implements Observer {
 		
 		TextView screenName = (TextView) convertView.findViewById(R.id.textViewScreennameUser);
 		TextView realName = (TextView) convertView.findViewById(R.id.textViewRealNameUser);
-		ImageView profilePic = (ImageView) convertView.findViewById(R.id.imageViewProfilePicProfile);
-//		if(user.getBitmap() != null) {
-//			profilePic.setImageBitmap(user.getBitmap());
-//		}
+		ImageView profilePic = (ImageView) convertView.findViewById(R.id.imageViewPicUser);
+		if(user.getBitmap() != null) {
+			profilePic.setImageBitmap(user.getBitmap());
+		}
 
 		screenName.setText(user.getUserName());
 		realName.setText(user.getName());

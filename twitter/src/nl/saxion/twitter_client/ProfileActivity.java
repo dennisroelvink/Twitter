@@ -258,11 +258,6 @@ public class ProfileActivity extends ActionBarActivity implements Observer {
 
 	@Override
 	public void update(Observable observable, Object data) {
-		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
-		Editor editor = prefs.edit();
-		editor.putString("token", ""+model.getToken());
-		editor.putString("tokenSecret", ""+model.getSecret());
-		editor.commit();
 		
 		if(model.getAccount().getName().length() == 0) {
 			Toast.makeText(getApplicationContext(), "There was an Error", Toast.LENGTH_SHORT).show();

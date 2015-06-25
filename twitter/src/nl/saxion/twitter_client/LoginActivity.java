@@ -60,28 +60,29 @@ public class LoginActivity extends Activity implements Observer {
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				if(url.startsWith("http://grotekaartenkopen.nl")){
-					Log.d("Override", "Doei nanda " + url);
+					Log.d("URL (login)", url);
 					
 					Uri uri = Uri.parse(url);
 					
-					Log.d("NANDA",uri.getQueryParameter("oauth_verifier"));
+					Log.d("Verify token (login)",uri.getQueryParameter("oauth_verifier"));
 					
 					
+					Activity mainActivity = model.getMainActivity();
 					Intent i = new Intent(LoginActivity.this,ProfileActivity.class);
 					ConnectionHandler verify = model.getcHandler();
-					verify.getConnectionInit(uri.getQueryParameter("oauth_verifier"),model.getMainActivity());
+					verify.getConnectionInit(uri.getQueryParameter("oauth_verifier"),mainActivity);
 					
 					startActivity(i);
 					return true;
 				} else {
-					Log.d("Override", "NANDA");
+					Log.d("Override", "");
 					return false;
 				}
 
 			}
 		});
 
-		cHandler =model.getcHandler();
+		cHandler = model.getcHandler();
 		cHandler.getVerifyCodeinit(this);
 
 	}

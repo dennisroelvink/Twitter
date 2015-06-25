@@ -167,8 +167,6 @@ public class JSONHandler {
 					
 				}
 
-				Log.d("Dimitri", getTweetText(tweet));
-				
 				User un = new User(user.getString("screen_name"), user.getString("name"),user.getString("profile_image_url"));
 				Tweet t = new Tweet(tweet.getString("id_str"),tweet.getString("text"), un, hashtagList, urlList, usermentionList, p);
 				if(tweet.getBoolean("favorited") == true) {

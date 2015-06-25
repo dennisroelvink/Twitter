@@ -163,10 +163,10 @@ public class URLTool {
 
 				setJSONText(builder.toString());
 			} catch (ClientProtocolException e) {
-				Log.d("Client","Client fout");
+				Log.d("Client","Client error");
 				e.printStackTrace();
 			} catch (IOException e) {
-				Log.d("IO","IO Fout");
+				Log.d("IO","IO error");
 				e.printStackTrace();
 			}
 			return null;

@@ -39,15 +39,13 @@ public class HomeActivity extends ActionBarActivity {
 		guest = (Button) findViewById(R.id.buttonGuest);
 		
 		SharedPreferences prefs = getSharedPreferences(PREFS, 0);
-		String token = prefs.getString("token", "");
+		String token = prefs.getString("token", "");		  
+		
+		
 		String secret = prefs.getString("tokenSecret", "");
-		Log.d("Putt",prefs.getString("token", ""));
-		Log.d("Putt",prefs.getString("tokenSecret", ""));
-		//TODO '=' veranderen in !
-		if(token.length() == 0 && secret.length() !=0) {
+		if(token.length() >= 4 && secret.length() >=4) {
 			
 			consumer.setTokenWithSecret(token,	secret);
-			Log.d("Putt",consumer.getToken());
 			Intent i = new Intent(HomeActivity.this,ProfileActivity.class);
 			startActivity(i);
 		}
